@@ -54,7 +54,8 @@ class Letter:
         return self.character
 
     def details(self):
-        detail = self.character + " x:" + str(self.x) + " y:" + str(self.y)
+        detail = self.character + " x:" + str(self.x) + " y:" + str(self.y) + \
+          " pt-val:" + str(self.point_value)
         if self.is_on_board:
             detail += " on_board=True"
         if self.is_wildcard:
@@ -233,6 +234,8 @@ def get_whole_horizontal_word(board, word):
   while right_x < BOARD_SZ-1 and board[right_x+1][y] != ' ':
     right_x += 1
   horizontal_word, count = [], 0
+  while word[count].is_on_board:
+    count += 1
   for i in range(left_x, right_x+1):
     if board[i][y] != ' ':
       horizontal_word.append(Letter(board[i][y], i, y))
@@ -248,6 +251,8 @@ def get_whole_vertical_word(board, word):
   while bottom_y < BOARD_SZ-1 and board[x][bottom_y+1] != ' ':
     bottom_y += 1
   vertical_word, count = [], 0
+  while word[count].is_on_board:
+    count += 1
   for i in range(top_y, bottom_y+1):
     if board[x][i] != ' ':
       vertical_word.append(Letter(board[x][i], x, i))
@@ -309,6 +314,7 @@ def score(board, config, word):
     
 if __name__ == "__main__":
     board = read_board("scrabble_board.txt")
+    #board = read_board("Ian_55555.txt")
     config =  read_board_config("scrabble_board_config.txt")
     hand = read_hand("scrabble_hand.txt")
     trie, valid_words = init_trie("dict.txt")
