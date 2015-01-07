@@ -288,9 +288,10 @@ def causes_other_invalid_words(board, word):
             return True
     return False
 
-def score_individual_word(word, config):
+def score_individual_word(board, config, word):
     multipliers = []
     base_score = 0
+    n_hand_words_used = 0
     for letter in word:
         x, y = letter.x, letter.y
         letter_base_points = letter.point_value
@@ -303,13 +304,14 @@ def score_individual_word(word, config):
         if config[x][y] == TL:
             letter_base_points *= 3
         base_score += letter_base_points
-    return reduce(mul, multipliers, 1) * base_score
+        n_hand_words_used += int(board[x][y] == ' ')
+    return reduce(mul, multipliers, 1) * base_score + int(n_hand_words_used == 7) * 35
 
 def score(board, config, word):
     total_score = 0
     for seq in get_all_newly_formed_seq(board, word):
         assert("".join([str(x) for x in seq]) in valid_words)
-        total_score += score_individual_word(seq, config)
+        total_score += score_individual_word(board, config, seq)
     return total_score
     
 if __name__ == "__main__":
