@@ -123,15 +123,23 @@ def accumulate_hand_letters(hand):
         letters.append(Letter(letter, -1, -1, False, letter == '*'))
     return letters
 
+def generate_all_horizontal_words(board, board_letter, hand_letters):
+    horizontal_words = form_horizontal_words(board, board_letter, hand_letters)
+    horizontal_words = [determine_horizontal_placements(x) for x in horizontal_words]
+    horizontal_words = [x for x in horizontal_words if x]
+    return horizontal_words
+
+def generate_all_vertical_words(board, board_letter, hand_letters):
+    vertical_words = form_vertical_words(board, board_letter, hand_letters)
+    vertical_words = [determine_vertical_placements(x) for x in vertical_words]
+    vertical_words = [x for x in vertical_words if x]
+    return vertical_words
+    
 def generate_possible_words(board, board_letters, hand_letters):
     possible_words = []
     for board_letter in board_letters:
-        horizontal_words = form_horizontal_words(board, board_letter, hand_letters)
-        horizontal_words = [determine_horizontal_placements(x) for x in horizontal_words]
-        horizontal_words = [x for x in horizontal_words if x]
-        vertical_words = form_vertical_words(board, board_letter, hand_letters)
-        vertical_words = [determine_vertical_placements(x) for x in vertical_words]
-        vertical_words = [x for x in vertical_words if x]
+        vertical_words = generate_all_vertical_words(board, board_letter, hand_letters)
+        horizontal_words = generate_all_horizontal_words(board, board_letter, hand_letters)
         possible_words += vertical_words
         possible_words += horizontal_words
     for word in possible_words:
