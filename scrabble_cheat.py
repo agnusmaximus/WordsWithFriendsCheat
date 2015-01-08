@@ -375,6 +375,26 @@ def score(board, config, word):
         assert(unicode("".join([str(x) for x in seq])) in trie)
         total_score += score_individual_word(board, config, seq)
     return total_score
+
+######################################################################
+# DEBUG/PRINTS/HELPERS
+######################################################################
+def print_word_candidate(word_candidate):
+    print("Score: " + str(word_candidate[1]))
+    for detail in [x.details() for x in word_candidate[0]]:
+        print(detail)
+    print('--------------------------------------------------------------')
+    print("All newly formed words:")
+    formed_seqs = get_all_newly_formed_seq(board, word_candidate[0])
+    for seq in formed_seqs:
+        print("".join([str(x) for x in seq]))
+    print('--------------------------------------------------------------')
+
+def candidate_contains_wildcard(word_candidate):
+    for letter in word_candidate:
+        if letter.is_wildcard:
+            return True
+    return False
     
 if __name__ == "__main__":
     board = read_board("scrabble_board.txt")
@@ -389,13 +409,14 @@ if __name__ == "__main__":
     print('--------------------------------------------------------------')
     print(word_candidates[:50])
     print('--------------------------------------------------------------')
-    print("Best Score: " + str(word_candidates[0][1]))
-    for detail in [x.details() for x in word_candidates[0][0]]:
-        print(detail)
-    print('--------------------------------------------------------------')
-    print("All newly formed words:")
-    formed_seqs = get_all_newly_formed_seq(board, word_candidates[0][0])
-    for seq in formed_seqs:
-        print("".join([str(x) for x in seq]))
-    print('--------------------------------------------------------------')
+    top_candidate_no_wildcard = None
+    top_candidate = word_candidates[0]
+    for word_candidate in word_candidates:
+        if not candidate_contains_wildcard(word_candidate[0]):
+            top_candidate_no_wildcard = word_candidate
+            break
+    if top_candidate_no_wildcard != top_candidate:
+        print_word_candidate(top_candidate_no_wildcard)
+    print_word_candidate(top_candidate)
+    
     
