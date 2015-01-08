@@ -228,37 +228,35 @@ def determine_horizontal_placements(letters):
     return placed_letters
 
 def get_whole_horizontal_word(board, word):
-  left_x, right_x, y = word[0].x, word[-1].x, word[0].y
+  left_x, right_x, y, offset = word[0].x, word[-1].x, word[0].y, 0
   while left_x > 0 and board[left_x-1][y] != ' ':
+    offset -= 1
     left_x -= 1
   while right_x < BOARD_SZ-1 and board[right_x+1][y] != ' ':
     right_x += 1
   horizontal_word, count = [], 0
-  for i in range(left_x, right_x+1):
+  for index, i in enumerate(range(left_x, right_x+1)):
     while count < len(word) and word[count].is_on_board:
       count += 1
     if board[i][y] != ' ':
       horizontal_word.append(Letter(board[i][y], i, y))
     else:
-      horizontal_word.append(copy.copy(word[count]))
-      count += 1
+      horizontal_word.append(copy.copy(word[offset+index]))
   return horizontal_word
 
 def get_whole_vertical_word(board, word):
-  top_y, bottom_y, x = word[0].y, word[-1].y, word[0].x
+  top_y, bottom_y, x, offset = word[0].y, word[-1].y, word[0].x, 0
   while top_y > 0 and board[x][top_y-1] != ' ':
+    offset -= 1
     top_y -= 1
   while bottom_y < BOARD_SZ-1 and board[x][bottom_y+1] != ' ':
     bottom_y += 1
-  vertical_word, count = [], 0
-  for i in range(top_y, bottom_y+1):
-    while count < len(word) and word[count].is_on_board:
-      count += 1
+  vertical_word = []
+  for index, i in enumerate(range(top_y, bottom_y+1)):
     if board[x][i] != ' ':
       vertical_word.append(Letter(board[x][i], x, i))
     else:
-      vertical_word.append(copy.copy(word[count]))
-      count += 1
+      vertical_word.append(copy.copy(word[offset+index]))
   return vertical_word
 
 def get_all_newly_formed_seq(board, word):
@@ -316,7 +314,6 @@ def score(board, config, word):
     
 if __name__ == "__main__":
     board = read_board("scrabble_board.txt")
-    #board = read_board("Ian_55555.txt")
     config =  read_board_config("scrabble_board_config.txt")
     hand = read_hand("scrabble_hand.txt")
     trie, valid_words = init_trie("dict.txt")
