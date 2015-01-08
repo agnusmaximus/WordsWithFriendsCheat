@@ -381,7 +381,6 @@ if __name__ == "__main__":
     config =  read_board_config("scrabble_board_config.txt")
     hand = read_hand("scrabble_hand.txt")
     trie = init_trie("dict.txt")
-    print(trie.has_keys_with_prefix(unicode("hall")))
     update_score_multipliers(board, config)
     word_candidates = generate_word_candidates(board, config, hand)
     if len(word_candidates) == 0:
