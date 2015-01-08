@@ -2,7 +2,7 @@ import sys
 import copy
 from itertools import groupby
 from operator import mul
-from pytrie import StringTrie
+from marisa_trie import RecordTrie as Trie
 
 # Score multipliers
 BOARD_SZ = 15
@@ -11,19 +11,17 @@ POINT_VALS = {'a' : 1, 'b' : 4, 'c' : 4, 'd' : 2, 'e' : 1, 'f' : 4, 'g' : 3, 'h'
               'j' : 10, 'k' : 5, 'l' : 2, 'm' : 4, 'n' : 2, 'o' : 1, 'p' : 4, 'q' : 10, 'r' : 1, \
               's' : 1, 't' : 1, 'u' : 2, 'v' : 5, 'w' : 4, 'x' : 8, 'y' : 3, 'z' : 10, '*' : 0}
 trie = None
-valid_words = None
 
 ######################################################################
 # TRIE STUFF
 ######################################################################
 def init_trie(dict_file_path):
     dict_file = open(dict_file_path, "r")
-    words = set()
+    vals = []
     for line in dict_file:
         line = line.strip().lower()
-        words.add(line)
-    word_pairings = dict(zip(words, range(len(words))))
-    return (StringTrie(word_pairings), words)
+        vals += [unicode(line)]
+    return Trie("<HH", zip(vals, [(1, 1) for x in range(len(vals))]))
 
 ######################################################################
 # SCRABBLE LETTER CLASS
@@ -165,9 +163,9 @@ def filter_words(board, word_candidates):
 def form_horizontal_words(board, board_letter, hand, used_board_letter=False,
                           posx=-1, posy=-1, cur_word_list=[], cur_word=""):
     sol = []
-    if cur_word != "" and len(trie.keys(prefix=cur_word)) == 0:
+    if not trie.has_keys_with_prefix(unicode(cur_word)):
         return sol
-    if cur_word in valid_words and used_board_letter:
+    if unicode(cur_word) in trie and used_board_letter:
         sol.append([copy.copy(x) for x in cur_word_list])
     if hand == []:
         if used_board_letter:
@@ -210,9 +208,9 @@ def form_horizontal_words(board, board_letter, hand, used_board_letter=False,
 def form_vertical_words(board, board_letter, hand, used_board_letter=False,
                         posx=-1, posy=-1, cur_word_list=[], cur_word=""):
     sol = []
-    if cur_word != "" and len(trie.keys(prefix=cur_word)) == 0:
-        return []
-    if cur_word in valid_words and used_board_letter:
+    if not trie.has_keys_with_prefix(unicode(cur_word)):
+        return sol
+    if unicode(cur_word) in trie and used_board_letter:
         sol.append([copy.copy(x) for x in cur_word_list])
     if hand == []:
         if used_board_letter:
@@ -348,7 +346,7 @@ def get_all_newly_formed_seq(board, word):
 def causes_other_invalid_words(board, word):
     for seqs in get_all_newly_formed_seq(board, word):
         cur_seq_str = "".join([str(x) for x in seqs])
-        if cur_seq_str not in valid_words:
+        if unicode(cur_seq_str) not in trie:
             return True
     return False
 
@@ -374,7 +372,7 @@ def score_individual_word(board, config, word):
 def score(board, config, word):
     total_score = 0
     for seq in get_all_newly_formed_seq(board, word):
-        assert("".join([str(x) for x in seq]) in valid_words)
+        assert(unicode("".join([str(x) for x in seq])) in trie)
         total_score += score_individual_word(board, config, seq)
     return total_score
     
@@ -382,9 +380,13 @@ if __name__ == "__main__":
     board = read_board("scrabble_board.txt")
     config =  read_board_config("scrabble_board_config.txt")
     hand = read_hand("scrabble_hand.txt")
-    trie, valid_words = init_trie("dict.txt")
+    trie = init_trie("dict.txt")
+    print(trie.has_keys_with_prefix(unicode("hall")))
     update_score_multipliers(board, config)
     word_candidates = generate_word_candidates(board, config, hand)
+    if len(word_candidates) == 0:
+        print("No possible words can be made.")
+        sys.exit(0)
     print('--------------------------------------------------------------')
     print(word_candidates[:50])
     print('--------------------------------------------------------------')
