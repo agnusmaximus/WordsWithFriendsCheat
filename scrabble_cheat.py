@@ -268,7 +268,7 @@ def form_vertical_words(board, board_letter, hand, used_board_letter=False,
                 partial_solution += \
                 form_horizontal_words(board, board_letter, new_hand,
                                       used_board_letter,
-                                      posx+incr, posy,
+                                      posx, posy+incr,
                                       cur_word_list + [Letter(wildcard, -1, -1, wildcard=True)],
                                       cur_word + wildcard)
         else:
