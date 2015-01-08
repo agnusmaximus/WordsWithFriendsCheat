@@ -128,13 +128,6 @@ def accumulate_hand_letters(hand):
 def generate_possible_words(board, board_letters, hand_letters):
     possible_words = []
     for board_letter in board_letters:
-        """working_set = hand_letters + [board_letter]
-        valid_words = words_from_character_set(working_set)
-        vertical_placements = [determine_vertical_placements(x) for x in valid_words]
-        vertical_placements = [x for x in vertical_placements if x]
-        horizontal_placements = [determine_horizontal_placements(x) for x in valid_words]
-        horizontal_placements = [x for x in horizontal_placements if x]
-        possible_words += vertical_placements + horizontal_placements"""
         horizontal_words = form_horizontal_words(board, board_letter, hand_letters)
         horizontal_words = [determine_horizontal_placements(x) for x in horizontal_words]
         horizontal_words = [x for x in horizontal_words if x]
@@ -168,32 +161,6 @@ def filter_words(board, word_candidates):
         if not causes_other_invalid_words(board, word_candidate):
             valid_words.append(word_candidate)
     return valid_words
-
-"""def words_from_character_set(char_set, cur_word_list=[], cur_word=""):
-    sol = []
-    if cur_word in valid_words:
-        sol.append([copy.copy(x) for x in cur_word_list])
-    if char_set == []:
-        return sol
-    if cur_word != "" and len(trie.keys(prefix=cur_word)) == 0:
-        return sol
-    for i, char in enumerate(char_set):
-        if char.character == '*':
-            for wildcard in list("abcdefghijklmnopqrstuvwxyz"):
-                cur_word_list.append(Letter(wildcard, char.x, char.y, char.is_on_board, True))
-                cur_word += wildcard
-                new_char_set = char_set[:i] + char_set[i+1:]
-                sol += words_from_character_set(new_char_set, cur_word_list, cur_word)
-                cur_word = cur_word[:-1]
-                cur_word_list.pop(-1)
-        else:
-            cur_word_list.append(char)
-            cur_word += char.character
-            new_char_set = char_set[:i] + char_set[i+1:]
-            sol += words_from_character_set(new_char_set, cur_word_list, cur_word)
-            cur_word = cur_word[:-1]
-            cur_word_list.pop(-1)
-    return sol"""
 
 def form_horizontal_words(board, board_letter, hand, used_board_letter=False,
                           posx=-1, posy=-1, cur_word_list=[], cur_word=""):
