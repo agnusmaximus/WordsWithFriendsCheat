@@ -170,7 +170,6 @@ def form_horizontal_words(board, board_letter, hand, used_board_letter=False,
     if hand == []:
         if used_board_letter:
             return sol
-        return []
     if posx >= BOARD_SZ:
         return sol
     if used_board_letter and board[posx][posy] != ' ':
@@ -215,7 +214,6 @@ def form_vertical_words(board, board_letter, hand, used_board_letter=False,
     if hand == []:
         if used_board_letter:
             return sol
-        return []
     if posy >= BOARD_SZ:
         return sol
     if used_board_letter and board[posx][posy] != ' ':
