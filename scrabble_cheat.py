@@ -1,8 +1,10 @@
 import sys
 import copy
+import itertools
 from itertools import groupby
 from operator import mul
 from marisa_trie import RecordTrie as Trie
+import multiprocessing as mp
 
 # Score multipliers
 BOARD_SZ = 15
@@ -123,25 +125,28 @@ def accumulate_hand_letters(hand):
         letters.append(Letter(letter, -1, -1, False, letter == '*'))
     return letters
 
-def generate_all_horizontal_words(board, board_letter, hand_letters):
+def generate_all_horizontal_words((board, board_letter, hand_letters)):
     horizontal_words = form_horizontal_words(board, board_letter, hand_letters)
     horizontal_words = [determine_horizontal_placements(x) for x in horizontal_words]
     horizontal_words = [x for x in horizontal_words if x]
     return horizontal_words
 
-def generate_all_vertical_words(board, board_letter, hand_letters):
+def generate_all_vertical_words((board, board_letter, hand_letters)):
     vertical_words = form_vertical_words(board, board_letter, hand_letters)
     vertical_words = [determine_vertical_placements(x) for x in vertical_words]
     vertical_words = [x for x in vertical_words if x]
     return vertical_words
     
 def generate_possible_words(board, board_letters, hand_letters):
-    possible_words = []
+    p = mp.Pool(8)
+    data = []
     for board_letter in board_letters:
-        vertical_words = generate_all_vertical_words(board, board_letter, hand_letters)
-        horizontal_words = generate_all_horizontal_words(board, board_letter, hand_letters)
-        possible_words += vertical_words
-        possible_words += horizontal_words
+        data.append([board, board_letter, hand_letters])
+    horizontals = p.map(generate_all_horizontal_words, data)
+    verticals = p.map(generate_all_vertical_words, data)
+    p.close()
+    p.join()
+    possible_words = list(itertools.chain(*horizontals+verticals))
     for word in possible_words:
         for character in word:
             assert(character.x >= 0 and character.y >= 0 and \
