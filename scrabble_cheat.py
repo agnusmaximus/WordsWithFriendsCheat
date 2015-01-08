@@ -199,7 +199,7 @@ def form_horizontal_words(board, board_letter, hand, used_board_letter=False,
                           posx=-1, posy=-1, cur_word_list=[], cur_word=""):
     sol = []
     if cur_word != "" and len(trie.keys(prefix=cur_word)) == 0:
-        return []
+        return sol
     if cur_word in valid_words and used_board_letter:
         sol.append([copy.copy(x) for x in cur_word_list])
     if hand == []:
@@ -214,26 +214,27 @@ def form_horizontal_words(board, board_letter, hand, used_board_letter=False,
                                      posx+1, posy, 
                                      cur_word_list + [Letter(board[posx][posy], posx, posy)],
                                      cur_word+board[posx][posy])
-    if used_board_letter:
-        for i, letter in enumerate(hand):
-            new_hand = hand[:i] + hand[i+1:]
+    incr = 1 if used_board_letter else 0
+    for i, letter in enumerate(hand):
+        new_hand = hand[:i] + hand[i+1:]
+        partial_solution = []
+        if letter.character == '*':
+            for wildcard in list("abcdefghijklmnopqrstuvwxyz"):
+                partial_solution += \
+                form_horizontal_words(board, board_letter, new_hand,
+                                      used_board_letter,
+                                      posx+incr, posy,
+                                      cur_word_list + [Letter(wildcard, -1, -1, wildcard=True)],
+                                      cur_word + wildcard)
+        else:
             partial_solution = form_horizontal_words(board, board_letter, new_hand,
                                                      used_board_letter,
-                                                     posx+1, posy, 
+                                                     posx+incr, posy, 
                                                      cur_word_list + [letter],
                                                      cur_word + letter.character)
-            sol += partial_solution
-    else:
-        for i, letter in enumerate(hand):
-            new_hand = hand[:i] + hand[i+1:]
-            partial_solution = form_horizontal_words(board, board_letter, new_hand,
-                                                     used_board_letter,
-                                                     posx, posy,
-                                                     cur_word_list + [letter],
-                                                     cur_word + letter.character)
-            sol += partial_solution
-        sol += form_horizontal_words(board, board_letter, hand,
-                                     True,
+        sol += partial_solution
+    if not used_board_letter:
+        sol += form_horizontal_words(board, board_letter, hand, True,
                                      board_letter.x+1, board_letter.y,
                                      cur_word_list + [board_letter],
                                      cur_word + board_letter.character)
@@ -258,29 +259,30 @@ def form_vertical_words(board, board_letter, hand, used_board_letter=False,
                                      posx, posy+1, 
                                      cur_word_list + [Letter(board[posx][posy], posx, posy)],
                                      cur_word+board[posx][posy])
-    if used_board_letter:
-        for i, letter in enumerate(hand):
-            new_hand = hand[:i] + hand[i+1:]
+    incr = 1 if used_board_letter else 0
+    for i, letter in enumerate(hand):
+        new_hand = hand[:i] + hand[i+1:]
+        partial_solution = []
+        if letter.character == '*':
+            for wildcard in list("abcdefghijklmnopqrstuvwxyz"):
+                partial_solution += \
+                form_horizontal_words(board, board_letter, new_hand,
+                                      used_board_letter,
+                                      posx+incr, posy,
+                                      cur_word_list + [Letter(wildcard, -1, -1, wildcard=True)],
+                                      cur_word + wildcard)
+        else:
             partial_solution = form_vertical_words(board, board_letter, new_hand,
-                                                     used_board_letter,
-                                                     posx, posy+1, 
-                                                     cur_word_list + [letter],
-                                                     cur_word + letter.character)
+                                                   used_board_letter,
+                                                   posx, posy+incr, 
+                                                   cur_word_list + [letter],
+                                                   cur_word + letter.character)
             sol += partial_solution
-    else:
-        for i, letter in enumerate(hand):
-            new_hand = hand[:i] + hand[i+1:]
-            partial_solution = form_vertical_words(board, board_letter, new_hand,
-                                                     used_board_letter,
-                                                     posx, posy,
-                                                     cur_word_list + [letter],
-                                                     cur_word + letter.character)
-            sol += partial_solution
-        sol += form_vertical_words(board, board_letter, hand,
-                                     True,
-                                     board_letter.x, board_letter.y+1,
-                                     cur_word_list + [board_letter],
-                                     cur_word + board_letter.character)
+    if not used_board_letter:
+        sol += form_vertical_words(board, board_letter, hand, True,
+                                   board_letter.x, board_letter.y+1,
+                                   cur_word_list + [board_letter],
+                                   cur_word + board_letter.character)
     return sol
 
     
