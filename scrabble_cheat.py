@@ -212,7 +212,7 @@ def form_horizontal_words(board, board_letter, hand, used_board_letter=False,
         return form_horizontal_words(board, board_letter, 
                                      hand, used_board_letter,
                                      posx+1, posy, 
-                                     cur_word_list + [Letter(board[posx][posy], posx, posy)],
+                                     cur_word_list + [Letter(board[posx][posy], posx, posy, is_on_board=True)],
                                      cur_word+board[posx][posy])
     incr = 1 if used_board_letter else 0
     for i, letter in enumerate(hand):
@@ -227,7 +227,7 @@ def form_horizontal_words(board, board_letter, hand, used_board_letter=False,
                                       cur_word_list + [Letter(wildcard, -1, -1, wildcard=True)],
                                       cur_word + wildcard)
         else:
-            partial_solution = form_horizontal_words(board, board_letter, new_hand,
+            partial_solution += form_horizontal_words(board, board_letter, new_hand,
                                                      used_board_letter,
                                                      posx+incr, posy, 
                                                      cur_word_list + [letter],
@@ -257,7 +257,7 @@ def form_vertical_words(board, board_letter, hand, used_board_letter=False,
         return form_vertical_words(board, board_letter, 
                                      hand, used_board_letter,
                                      posx, posy+1, 
-                                     cur_word_list + [Letter(board[posx][posy], posx, posy)],
+                                     cur_word_list + [Letter(board[posx][posy], posx, posy, is_on_board=True)],
                                      cur_word+board[posx][posy])
     incr = 1 if used_board_letter else 0
     for i, letter in enumerate(hand):
@@ -272,12 +272,12 @@ def form_vertical_words(board, board_letter, hand, used_board_letter=False,
                                     cur_word_list + [Letter(wildcard, -1, -1, wildcard=True)],
                                     cur_word + wildcard)
         else:
-            partial_solution = form_vertical_words(board, board_letter, new_hand,
-                                                   used_board_letter,
-                                                   posx, posy+incr, 
-                                                   cur_word_list + [letter],
-                                                   cur_word + letter.character)
-            sol += partial_solution
+            partial_solution += form_vertical_words(board, board_letter, new_hand,
+                                                    used_board_letter,
+                                                    posx, posy+incr, 
+                                                    cur_word_list + [letter],
+                                                    cur_word + letter.character)
+        sol += partial_solution
     if not used_board_letter:
         sol += form_vertical_words(board, board_letter, hand, True,
                                    board_letter.x, board_letter.y+1,
