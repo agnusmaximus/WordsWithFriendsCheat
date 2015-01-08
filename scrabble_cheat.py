@@ -54,7 +54,7 @@ class Letter:
         return self.character
 
     def details(self):
-        detail = self.character + " x:" + str(self.x) + " y:" + str(self.y) + \
+        detail = self.character + " x:" + str(self.y+1) + " y:" + str(self.x+1) + \
           " pt-val:" + str(self.point_value)
         if self.is_on_board:
             detail += " on_board=True"
@@ -234,9 +234,9 @@ def get_whole_horizontal_word(board, word):
   while right_x < BOARD_SZ-1 and board[right_x+1][y] != ' ':
     right_x += 1
   horizontal_word, count = [], 0
-  while word[count].is_on_board:
-    count += 1
   for i in range(left_x, right_x+1):
+    while count < len(word) and word[count].is_on_board:
+      count += 1
     if board[i][y] != ' ':
       horizontal_word.append(Letter(board[i][y], i, y))
     else:
@@ -251,9 +251,9 @@ def get_whole_vertical_word(board, word):
   while bottom_y < BOARD_SZ-1 and board[x][bottom_y+1] != ' ':
     bottom_y += 1
   vertical_word, count = [], 0
-  while word[count].is_on_board:
-    count += 1
   for i in range(top_y, bottom_y+1):
+    while count < len(word) and word[count].is_on_board:
+      count += 1
     if board[x][i] != ' ':
       vertical_word.append(Letter(board[x][i], x, i))
     else:
