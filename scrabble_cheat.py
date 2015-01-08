@@ -266,11 +266,11 @@ def form_vertical_words(board, board_letter, hand, used_board_letter=False,
         if letter.character == '*':
             for wildcard in list("abcdefghijklmnopqrstuvwxyz"):
                 partial_solution += \
-                form_horizontal_words(board, board_letter, new_hand,
-                                      used_board_letter,
-                                      posx, posy+incr,
-                                      cur_word_list + [Letter(wildcard, -1, -1, wildcard=True)],
-                                      cur_word + wildcard)
+                form_vertical_words(board, board_letter, new_hand,
+                                    used_board_letter,
+                                    posx, posy+incr,
+                                    cur_word_list + [Letter(wildcard, -1, -1, wildcard=True)],
+                                    cur_word + wildcard)
         else:
             partial_solution = form_vertical_words(board, board_letter, new_hand,
                                                    used_board_letter,
