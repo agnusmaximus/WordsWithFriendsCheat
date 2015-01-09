@@ -201,7 +201,7 @@ def get_anchor_positions(board_letters, board):
 def get_num_non_anchor_pos(dirx, diry, x, y, all_anchor_pos, board):
     assert(dirx <= 0 and diry <= 0)
     x, y, k = x+dirx, y+diry, 0
-    while x >= 0:
+    while x >= 0 and y >= 0:
         if (x, y) in all_anchor_pos or board[x][y] != ' ':
             return k
         x, y, k = x+dirx, y+diry, k+1
@@ -243,14 +243,14 @@ def generate_horizontal_cross_section(hand_letters, board_letters, board):
                 if cross_section[x+1][y] == None:
                     cross_section[x+1][y] = set()
                 placed_letter = Letter(hand_character, x+1, y)
-                whole_seq = get_whole_vertical_word(board, [placed_letter])
+                whole_seq = get_whole_horizontal_word(board, [placed_letter])
                 if "".join(c.character for c in whole_seq) in valid_words:
                     cross_section[x+1][y].add(hand_character)
             if x > 0:
                 if cross_section[x-1][y] == None:
                     cross_section[x-1][y] = set()
                 placed_letter = Letter(hand_character, x-1, y)
-                whole_seq = get_whole_vertical_word(board, [placed_letter])
+                whole_seq = get_whole_horizontal_word(board, [placed_letter])
                 if "".join(c.character for c in whole_seq) in valid_words:
                     cross_section[x-1][y].add(hand_character)
     for i in range(BOARD_SZ):
@@ -270,6 +270,8 @@ def generate_horizontal_words(board, hand, cur_anchor_pos, all_anchor_pos, cross
     def extend_right(cur_seq, (x, y), board, hand):
         cur_string  = "".join([letter.character for letter in cur_seq])
         if x >= BOARD_SZ:
+            if cur_string in valid_words:
+                add_legal_move(cur_seq)
             return
         if board[x][y] == ' ':
             if cur_string in valid_words:
@@ -309,7 +311,7 @@ def generate_horizontal_words(board, hand, cur_anchor_pos, all_anchor_pos, cross
 
 def generate_vertical_words(board, hand, cur_anchor_pos, all_anchor_pos, cross_section):
     anchor_x, anchor_y = cur_anchor_pos[0], cur_anchor_pos[1]
-    k = get_num_non_anchor_pos(-1, 0, anchor_x, anchor_y, all_anchor_pos, board)
+    k = get_num_non_anchor_pos(0, -1, anchor_x, anchor_y, all_anchor_pos, board)
     generated_valid_words = []
     
     def add_legal_move(seq):
@@ -317,7 +319,9 @@ def generate_vertical_words(board, hand, cur_anchor_pos, all_anchor_pos, cross_s
     
     def extend_down(cur_seq, (x, y), board, hand):
         cur_string  = "".join([letter.character for letter in cur_seq])
-        if x >= BOARD_SZ:
+        if y >= BOARD_SZ:
+            if cur_string in valid_words:
+                add_legal_move(cur_seq)
             return
         if board[x][y] == ' ':
             if cur_string in valid_words:
@@ -347,9 +351,9 @@ def generate_vertical_words(board, hand, cur_anchor_pos, all_anchor_pos, cross_s
                                 (x, y-1), board, remaining_hand, limit-1)
                     board[x][y] = ' '
 
-    if k == 0 and anchor_x-1 >= 0:
-        while anchor_x > 0 and board[anchor_x-1][anchor_y] != ' ':
-            anchor_x -= 1
+    if k == 0 and anchor_y-1 >= 0:
+        while anchor_y > 0 and board[anchor_x][anchor_y-1] != ' ':
+            anchor_y -= 1
         extend_down([], (anchor_x, anchor_y), board, hand)
     else:
         extend_up([], cur_anchor_pos, board, hand, k)
