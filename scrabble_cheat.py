@@ -1,8 +1,9 @@
 import sys
+import os
 import copy
 from itertools import groupby
 from operator import mul
-from marisa_trie import RecordTrie as Trie
+import cPickle as pickle
 
 # Score multipliers
 BOARD_SZ = 15
@@ -10,18 +11,61 @@ BOARD_SZ = 15
 POINT_VALS = {'a' : 1, 'b' : 4, 'c' : 4, 'd' : 2, 'e' : 1, 'f' : 4, 'g' : 3, 'h' : 3, 'i' : 1, \
               'j' : 10, 'k' : 5, 'l' : 2, 'm' : 4, 'n' : 2, 'o' : 1, 'p' : 4, 'q' : 10, 'r' : 1, \
               's' : 1, 't' : 1, 'u' : 2, 'v' : 5, 'w' : 4, 'x' : 8, 'y' : 3, 'z' : 10, '*' : 0}
+midstring_prefix_letters = {}
+startstring_suffix_letters = {}
+valid_words = set()
+
+DICT_FILE = "dict.txt"
+VALID_WORDS_FILE = "valid_words.p"
+STARTSTRING_SUFFIX_LETTERS_FILE = "startstring_suffix_letters.p"
+MIDSTRING_PREFIX_LETTERS_FILE = "midstring_prefix_letters.p"
 
 ######################################################################
-# TRIE STUFF
+# AUX DATA STUFF
 ######################################################################
-def init_trie(dict_file_path):
-    dict_file = open(dict_file_path, "r")
-    vals = []
-    for line in dict_file:
-        line = line.strip().lower()
-        vals += [unicode(line)]
-    return Trie("<HH", zip(vals, [(1, 1) for x in range(len(vals))]))
-trie = init_trie("dict.txt")
+def add_startstring_suffix_letter(substring, letter):
+    if substring not in startstring_suffix_letters:
+        startstring_suffix_letters[substring] = set()
+    startstring_suffix_letters[substring].add(letter)
+
+def add_midstring_prefix_letter(substring, letter):
+    if substring not in midstring_prefix_letters:
+        midstring_prefix_letters[substring] = set()
+    midstring_prefix_letters[substring].add(letter)
+
+def add_aux_data(word):
+    for i in range(len(word)):
+        for j in range(i+1, len(word)+1):
+            substring = word[i:j]
+            if i == 0 and j == len(word):
+                valid_words.add(substring)
+            if i == 0 and j != len(word):
+                add_startstring_suffix_letter(substring, word[j])
+            if i != 0:
+                add_midstring_prefix_letter(substring, word[i-1])
+
+def init_aux_data():
+    global startstring_suffix_letters, midstring_prefix_letters, valid_words
+    if not os.path.exists(VALID_WORDS_FILE) or \
+        not os.path.exists(STARTSTRING_SUFFIX_LETTERS_FILE) or \
+        not os.path.exists(MIDSTRING_PREFIX_LETTERS_FILE):
+        print("Computing aux data...")
+        d = open(DICT_FILE, "r")
+        for line in d:
+            line = line.strip()
+            add_aux_data(line)
+        midstring_prefix_letters[""] = set("abcdefghijklmnopqrstuvwxyz")
+        startstring_suffix_letters[""] = set("abcdefghijklmnopqrstuvwxyz")
+        pickle.dump(valid_words, open(VALID_WORDS_FILE, "wb"))
+        pickle.dump(startstring_suffix_letters, open(STARTSTRING_SUFFIX_LETTERS_FILE, "wb"))
+        pickle.dump(midstring_prefix_letters, open(MIDSTRING_PREFIX_LETTERS_FILE, "wb"))
+    else:
+        print("Loading aux data from files...")
+        valid_words = pickle.load(open(VALID_WORDS_FILE, "rb"))
+        startstring_suffix_letters = pickle.load(open(STARTSTRING_SUFFIX_LETTERS_FILE, "rb"))
+        midstring_prefix_letters = pickle.load(open(MIDSTRING_PREFIX_LETTERS_FILE, "rb"))
+
+init_aux_data()
 
 ######################################################################
 # SCRABBLE LETTER CLASS
@@ -104,8 +148,6 @@ def generate_word_candidates(board, config, hand):
     hand_letters = accumulate_hand_letters(hand)
     print("-Generating possible words...")
     possible_words = generate_possible_words(board, board_letters, hand_letters)
-    print("-Filtering words...")
-    possible_words = filter_words(board, possible_words)
     print("-Scoring words...")
     word_score_pairings = [(x, score(board, config, x)) for x in possible_words]
     sorted_score_pairings = sorted(word_score_pairings, key=lambda x: x[1], reverse=True)
@@ -126,217 +168,193 @@ def accumulate_hand_letters(hand):
         letters.append(Letter(letter, -1, -1, False, letter == '*'))
     return letters
 
-def generate_all_horizontal_words(board, board_letter, hand_letters):
-    horizontal_words = form_horizontal_words(board, board_letter, hand_letters)
-    horizontal_words = [determine_horizontal_placements(x) for x in horizontal_words]
-    horizontal_words = [x for x in horizontal_words if x]
-    return horizontal_words
-
-def generate_all_vertical_words(board, board_letter, hand_letters):
-    vertical_words = form_vertical_words(board, board_letter, hand_letters)
-    vertical_words = [determine_vertical_placements(x) for x in vertical_words]
-    vertical_words = [x for x in vertical_words if x]
-    return vertical_words
-
-def generate_all_words_no_restrictions(board, hand_letters):
-    candidates = form_words_no_restrictions(hand_letters)
-    for candidate in candidates:
-        first_letter = candidate[0]
-        first_letter.x = first_letter.y = 7
-    candidates = [determine_horizontal_placements(x) for x in candidates]
-    candidates = [x for x in candidates if x]
-    return candidates
-    
 def generate_possible_words(board, board_letters, hand_letters):
-    if board_letters == []:
-        return generate_all_words_no_restrictions(board, hand_letters)
-        
+    anchor_positions = get_anchor_positions(board_letters, board)
+    if len(anchor_positions) == 0:
+        anchor_positions.add((7, 7))
     possible_words = []
-    for board_letter in board_letters:
-        vertical_words = generate_all_vertical_words(board, board_letter, hand_letters)
-        horizontal_words = generate_all_horizontal_words(board, board_letter, hand_letters)
-        possible_words += vertical_words
-        possible_words += horizontal_words
-    for word in possible_words:
-        for character in word:
-            assert(character.x >= 0 and character.y >= 0 and \
-                   character.x < BOARD_SZ and character.y < BOARD_SZ)
+    vertical_cross_section = generate_vertical_cross_section(hand_letters, board_letters, board)
+    horizontal_cross_section = generate_horizontal_cross_section(hand_letters, board_letters, board)
+    for anchor_pos in anchor_positions:
+        possible_words += \
+          generate_horizontal_words(board, hand_letters, anchor_pos, anchor_positions,
+                                    vertical_cross_section)
+        possible_words += \
+          generate_vertical_words(board, hand_letters, anchor_pos, anchor_positions,
+                                  horizontal_cross_section)
     return possible_words
 
-def filter_words(board, word_candidates):
-    collision_filtered_words = []
-    for word_candidate in word_candidates:
-        is_valid_candidate = True
-        did_all_overlap = True
-        for letter in word_candidate:
-            x, y = (letter.x, letter.y)
-            if board[x][y] != ' ' and board[x][y] != letter.character:
-                is_valid_candidate = False
-                break
-            if board[x][y] == ' ':
-                did_all_overlap = False
-        if is_valid_candidate and not did_all_overlap:
-            collision_filtered_words.append(word_candidate)
-    valid_words = []
-    for word_candidate in collision_filtered_words:
-        if not causes_other_invalid_words(board, word_candidate):
-            valid_words.append(word_candidate)
-    return valid_words
+def get_anchor_positions(board_letters, board):
+    anchor_positions = set()
+    for letter in board_letters:
+        x, y = letter.x, letter.y
+        if x+1 < BOARD_SZ and board[x+1][y] == ' ':
+            anchor_positions.add((x+1, y))
+        if x-1 >= 0 and board[x-1][y] == ' ':
+            anchor_positions.add((x-1, y))
+        if y+1 < BOARD_SZ and board[x][y+1] == ' ':
+            anchor_positions.add((x, y+1))
+        if y-1 >= 0 and board[x][y-1] == ' ':
+            anchor_positions.add((x, y-1))
+    return anchor_positions
 
-def form_horizontal_words(board, board_letter, hand, used_board_letter=False,
-                          posx=-1, posy=-1, cur_word_list=[], cur_word=""):
-    sol = []
-    if not trie.has_keys_with_prefix(unicode(cur_word)):
-        return sol
-    if unicode(cur_word) in trie and used_board_letter:
-        sol.append([copy.copy(x) for x in cur_word_list])
-    if hand == []:
-        if used_board_letter:
-            return sol
-    if posx >= BOARD_SZ:
-        return sol
-    if used_board_letter and board[posx][posy] != ' ':
-        return form_horizontal_words(board, board_letter, 
-                                     hand, used_board_letter,
-                                     posx+1, posy, 
-                                     cur_word_list + [Letter(board[posx][posy], posx, posy, is_on_board=True)],
-                                     cur_word+board[posx][posy])
-    incr = 1 if used_board_letter else 0
-    for i, letter in enumerate(hand):
-        new_hand = hand[:i] + hand[i+1:]
-        partial_solution = []
-        if letter.character == '*':
-            for wildcard in list("abcdefghijklmnopqrstuvwxyz"):
-                partial_solution += \
-                form_horizontal_words(board, board_letter, new_hand,
-                                      used_board_letter,
-                                      posx+incr, posy,
-                                      cur_word_list + [Letter(wildcard, -1, -1, wildcard=True)],
-                                      cur_word + wildcard)
-        else:
-            partial_solution += form_horizontal_words(board, board_letter, new_hand,
-                                                     used_board_letter,
-                                                     posx+incr, posy, 
-                                                     cur_word_list + [letter],
-                                                     cur_word + letter.character)
-        sol += partial_solution
-    if not used_board_letter:
-        sol += form_horizontal_words(board, board_letter, hand, True,
-                                     board_letter.x+1, board_letter.y,
-                                     cur_word_list + [board_letter],
-                                     cur_word + board_letter.character)
-    return sol
+def get_num_non_anchor_pos(dirx, diry, x, y, all_anchor_pos, board):
+    assert(dirx <= 0 and diry <= 0)
+    x, y, k = x+dirx, y+diry, 0
+    while x >= 0:
+        if (x, y) in all_anchor_pos or board[x][y] != ' ':
+            return k
+        x, y, k = x+dirx, y+diry, k+1
+    return k
 
-def form_vertical_words(board, board_letter, hand, used_board_letter=False,
-                        posx=-1, posy=-1, cur_word_list=[], cur_word=""):
-    sol = []
-    if not trie.has_keys_with_prefix(unicode(cur_word)):
-        return sol
-    if unicode(cur_word) in trie and used_board_letter:
-        sol.append([copy.copy(x) for x in cur_word_list])
-    if hand == []:
-        if used_board_letter:
-            return sol
-    if posy >= BOARD_SZ:
-        return sol
-    if used_board_letter and board[posx][posy] != ' ':
-        return form_vertical_words(board, board_letter, 
-                                     hand, used_board_letter,
-                                     posx, posy+1, 
-                                     cur_word_list + [Letter(board[posx][posy], posx, posy, is_on_board=True)],
-                                     cur_word+board[posx][posy])
-    incr = 1 if used_board_letter else 0
-    for i, letter in enumerate(hand):
-        new_hand = hand[:i] + hand[i+1:]
-        partial_solution = []
-        if letter.character == '*':
-            for wildcard in list("abcdefghijklmnopqrstuvwxyz"):
-                partial_solution += \
-                form_vertical_words(board, board_letter, new_hand,
-                                    used_board_letter,
-                                    posx, posy+incr,
-                                    cur_word_list + [Letter(wildcard, -1, -1, wildcard=True)],
-                                    cur_word + wildcard)
-        else:
-            partial_solution += form_vertical_words(board, board_letter, new_hand,
-                                                    used_board_letter,
-                                                    posx, posy+incr, 
-                                                    cur_word_list + [letter],
-                                                    cur_word + letter.character)
-        sol += partial_solution
-    if not used_board_letter:
-        sol += form_vertical_words(board, board_letter, hand, True,
-                                   board_letter.x, board_letter.y+1,
-                                   cur_word_list + [board_letter],
-                                   cur_word + board_letter.character)
-    return sol
+def generate_vertical_cross_section(hand_letters, board_letters, board):
+    hand_set = set([x.character for x in hand_letters])
+    cross_section = [[None for x in range(BOARD_SZ)] for y in range(BOARD_SZ)]
+    for board_letter in board_letters:
+        board_character, x, y = board_letter.character, board_letter.x, board_letter.y
+        for hand_character in hand_set:
+            if y < BOARD_SZ-1:
+                if cross_section[x][y+1] == None:
+                    cross_section[x][y+1] = set()
+                placed_letter = Letter(hand_character, x, y+1)
+                whole_seq = get_whole_vertical_word(board, [placed_letter])
+                if "".join(c.character for c in whole_seq) in valid_words:
+                    cross_section[x][y+1].add(hand_character)
+            if y > 0:
+                if cross_section[x][y-1] == None:
+                    cross_section[x][y-1] = set()
+                placed_letter = Letter(hand_character, x, y-1)
+                whole_seq = get_whole_vertical_word(board, [placed_letter])
+                if "".join(c.character for c in whole_seq) in valid_words:
+                    cross_section[x][y-1].add(hand_character)
+    for i in range(BOARD_SZ):
+        for j in range(BOARD_SZ):
+            if cross_section[i][j] == None:
+                cross_section[i][j] = hand_set
+    return cross_section
 
-def form_words_no_restrictions(hand, cur_word_list=[], cur_word=""):
-    sol = []
-    if not trie.has_keys_with_prefix(unicode(cur_word)):
-        return sol
-    if unicode(cur_word) in trie:
-        sol.append([copy.copy(x) for x in cur_word_list])
-    if hand == []:
-        return sol
+def generate_horizontal_cross_section(hand_letters, board_letters, board):
+    hand_set = set([x.character for x in hand_letters])
+    cross_section = [[None for x in range(BOARD_SZ)] for y in range(BOARD_SZ)]
+    for board_letter in board_letters:
+        board_character, x, y = board_letter.character, board_letter.x, board_letter.y
+        for hand_character in hand_set:
+            if x < BOARD_SZ-1:
+                if cross_section[x+1][y] == None:
+                    cross_section[x+1][y] = set()
+                placed_letter = Letter(hand_character, x+1, y)
+                whole_seq = get_whole_vertical_word(board, [placed_letter])
+                if "".join(c.character for c in whole_seq) in valid_words:
+                    cross_section[x+1][y].add(hand_character)
+            if x > 0:
+                if cross_section[x-1][y] == None:
+                    cross_section[x-1][y] = set()
+                placed_letter = Letter(hand_character, x-1, y)
+                whole_seq = get_whole_vertical_word(board, [placed_letter])
+                if "".join(c.character for c in whole_seq) in valid_words:
+                    cross_section[x-1][y].add(hand_character)
+    for i in range(BOARD_SZ):
+        for j in range(BOARD_SZ):
+            if cross_section[i][j] == None:
+                cross_section[i][j] = hand_set
+    return cross_section
+
+def generate_horizontal_words(board, hand, cur_anchor_pos, all_anchor_pos, cross_section):
+    anchor_x, anchor_y = cur_anchor_pos[0], cur_anchor_pos[1]
+    k = get_num_non_anchor_pos(-1, 0, anchor_x, anchor_y, all_anchor_pos, board)
+    generated_valid_words = []
     
-    for i, letter in enumerate(hand):
-        new_hand = hand[:i] + hand[i+1:]
-        partial_solution = []
-        if letter.character == '*':
-            for wildcard in list("abcdefghijklmnopqrstuvwxyz"):
-                partial_solution += \
-                form_words_no_restrictions(new_hand, 
-                                           cur_word_list+[Letter(wildcard, -1, -1, wildcard=True)],
-                                           cur_word+wildcard)
-
-        else:
-            partial_solution += form_words_no_restrictions(new_hand,
-                                                           cur_word_list+[letter],
-                                                           cur_word+letter.character)
-        sol += partial_solution
-    return sol
+    def add_legal_move(seq):
+        generated_valid_words.append(seq)
     
-def determine_vertical_placements(letters):
-    letter_on_board, index = None, -1
-    for i, letter in enumerate(letters):
-        if letter.x != -1 and letter.y != -1:
-           letter_on_board, index = letter, i
-           break
-    if letter_on_board is None:
-        return None
-    placed_letters = []
-    for i, letter in enumerate(letters):
-        disp = i - index
-        copied_letter = copy.copy(letter)
-        copied_letter.x = letter_on_board.x
-        copied_letter.y = letter_on_board.y + disp
-        if copied_letter.x < 0 or copied_letter.y < 0 or \
-          copied_letter.x >= BOARD_SZ or copied_letter.y >= BOARD_SZ:
-          return None
-        placed_letters.append(copied_letter)
-    return placed_letters
+    def extend_right(cur_seq, (x, y), board, hand):
+        cur_string  = "".join([letter.character for letter in cur_seq])
+        if x >= BOARD_SZ:
+            return
+        if board[x][y] == ' ':
+            if cur_string in valid_words:
+                add_legal_move(cur_seq)
+            for i, letter in enumerate(hand):
+                if letter.character in startstring_suffix_letters.get(cur_string, []) and \
+                    letter.character in cross_section[x][y]:
+                    remaining_hand = hand[:i] + hand[i+1:]
+                    extend_right(cur_seq+[Letter(letter.character, x, y)], 
+                                 (x+1, y), board, remaining_hand)
+        else:
+            if board[x][y] in startstring_suffix_letters.get(cur_string, []):
+                extend_right(cur_seq+[Letter(board[x][y], x, y)], 
+                             (x+1, y), board, hand)      
+    
+    def extend_left(cur_seq, (x, y), board, hand, limit):
+        cur_string = "".join([letter.character for letter in cur_seq])
+        if cur_string in startstring_suffix_letters:
+            extend_right([], (x, y), board, hand)
+        if limit > 0:
+            for i, letter in enumerate(hand):
+                if letter.character in midstring_prefix_letters.get(cur_string, []) and \
+                  letter.character in cross_section[x][y]:
+                    remaining_hand = hand[:i] + hand[i+1:]
+                    board[x][y] = letter.character
+                    extend_left([Letter(letter.character, x, y)]+cur_seq, 
+                                (x-1, y), board, remaining_hand, limit-1)
+                    board[x][y] = ' '
 
-def determine_horizontal_placements(letters):
-    letter_on_board, index = None, -1
-    for i, letter in enumerate(letters):
-        if letter.x != -1 and letter.y != -1:
-           letter_on_board, index = letter, i
-           break
-    if letter_on_board is None:
-        return None
-    placed_letters = []
-    for i, letter in enumerate(letters):
-        disp = i - index
-        copied_letter = copy.copy(letter)
-        copied_letter.y = letter_on_board.y
-        copied_letter.x = letter_on_board.x + disp
-        if copied_letter.x < 0 or copied_letter.y < 0 or \
-          copied_letter.x >= BOARD_SZ or copied_letter.y >= BOARD_SZ:
-          return None
-        placed_letters.append(copied_letter)
-    return placed_letters
+    if k == 0 and anchor_x-1 >= 0:
+        while anchor_x > 0 and board[anchor_x-1][anchor_y] != ' ':
+            anchor_x -= 1
+        extend_right([], (anchor_x, anchor_y), board, hand)
+    else:
+        extend_left([], cur_anchor_pos, board, hand, k)
+    return generated_valid_words
 
+def generate_vertical_words(board, hand, cur_anchor_pos, all_anchor_pos, cross_section):
+    anchor_x, anchor_y = cur_anchor_pos[0], cur_anchor_pos[1]
+    k = get_num_non_anchor_pos(-1, 0, anchor_x, anchor_y, all_anchor_pos, board)
+    generated_valid_words = []
+    
+    def add_legal_move(seq):
+        generated_valid_words.append(seq)
+    
+    def extend_down(cur_seq, (x, y), board, hand):
+        cur_string  = "".join([letter.character for letter in cur_seq])
+        if x >= BOARD_SZ:
+            return
+        if board[x][y] == ' ':
+            if cur_string in valid_words:
+                add_legal_move(cur_seq)
+            for i, letter in enumerate(hand):
+                if letter.character in startstring_suffix_letters.get(cur_string, []) and \
+                    letter.character in cross_section[x][y]:
+                    remaining_hand = hand[:i] + hand[i+1:]
+                    extend_down(cur_seq+[Letter(letter.character, x, y)], 
+                                 (x, y+1), board, remaining_hand)
+        else:
+            if board[x][y] in startstring_suffix_letters.get(cur_string, []):
+                extend_down(cur_seq+[Letter(board[x][y], x, y)], 
+                             (x, y+1), board, hand)      
+    
+    def extend_up(cur_seq, (x, y), board, hand, limit):
+        cur_string = "".join([letter.character for letter in cur_seq])
+        if cur_string in startstring_suffix_letters:
+            extend_down([], (x, y), board, hand)
+        if limit > 0:
+            for i, letter in enumerate(hand):
+                if letter.character in midstring_prefix_letters.get(cur_string, []) and \
+                  letter.character in cross_section[x][y]:
+                    remaining_hand = hand[:i] + hand[i+1:]
+                    board[x][y] = letter.character
+                    extend_up([Letter(letter.character, x, y)]+cur_seq, 
+                                (x, y-1), board, remaining_hand, limit-1)
+                    board[x][y] = ' '
+
+    if k == 0 and anchor_x-1 >= 0:
+        while anchor_x > 0 and board[anchor_x-1][anchor_y] != ' ':
+            anchor_x -= 1
+        extend_down([], (anchor_x, anchor_y), board, hand)
+    else:
+        extend_up([], cur_anchor_pos, board, hand, k)
+    return generated_valid_words
+    
 def get_whole_horizontal_word(board, word):
   left_x, right_x, y, offset = word[0].x, word[-1].x, word[0].y, 0
   while left_x > 0 and board[left_x-1][y] != ' ':
@@ -349,7 +367,7 @@ def get_whole_horizontal_word(board, word):
     while count < len(word) and word[count].is_on_board:
       count += 1
     if board[i][y] != ' ':
-      horizontal_word.append(Letter(board[i][y], i, y))
+      horizontal_word.append(Letter(board[i][y], i, y, is_on_board=True))
     else:
       horizontal_word.append(copy.copy(word[offset+index]))
   return horizontal_word
@@ -364,7 +382,7 @@ def get_whole_vertical_word(board, word):
   vertical_word = []
   for index, i in enumerate(range(top_y, bottom_y+1)):
     if board[x][i] != ' ':
-      vertical_word.append(Letter(board[x][i], x, i))
+      vertical_word.append(Letter(board[x][i], x, i, is_on_board=True))
     else:
       vertical_word.append(copy.copy(word[offset+index]))
   return vertical_word
@@ -392,7 +410,7 @@ def get_all_newly_formed_seq(board, word):
 def causes_other_invalid_words(board, word):
     for seqs in get_all_newly_formed_seq(board, word):
         cur_seq_str = "".join([str(x) for x in seqs])
-        if unicode(cur_seq_str) not in trie:
+        if cur_seq_str not in valid_words:
             return True
     return False
 
@@ -418,7 +436,7 @@ def score_individual_word(board, config, word):
 def score(board, config, word):
     total_score = 0
     for seq in get_all_newly_formed_seq(board, word):
-        assert(unicode("".join([str(x) for x in seq])) in trie)
+        assert("".join([str(x) for x in seq]) in valid_words)
         total_score += score_individual_word(board, config, seq)
     return total_score
 
