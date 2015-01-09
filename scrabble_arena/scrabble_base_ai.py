@@ -26,15 +26,11 @@ class scrabble_base_ai:
             return 0
         for letter in move[0]:
             self.board[letter.x][letter.y] = letter.character
-            if not letter.is_on_board:
-                if not letter.is_wildcard:
-                    if not letter.character in self.hand:
-                        print(letter.details())
-                        print(self.hand)
-                    assert(letter.character in self.hand)
+            if not letter.is_wildcard:
+                if letter.character in self.hand:
                     self.hand.remove(letter.character)
-                else:
-                    self.hand.remove('*')
+            else:
+                self.hand.remove('*')
         self.write_hand_to_file()
         self.write_board_to_file()
         return move[1]

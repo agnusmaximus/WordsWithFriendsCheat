@@ -71,15 +71,14 @@ init_aux_data()
 # SCRABBLE LETTER CLASS
 ######################################################################
 class Letter:
-    def __init__(self, character, x, y, is_on_board=False, wildcard=False):
+    def __init__(self, character, x, y, wildcard=False):
         self.character = character
         self.x, self.y = x, y
-        self.is_on_board = is_on_board
         self.is_wildcard = wildcard
         self.point_value = POINT_VALS[character] * int(not self.is_wildcard)
         
     def __copy__(self):
-        return Letter(self.character, self.x, self.y, self.is_on_board, self.is_wildcard)
+        return Letter(self.character, self.x, self.y, self.is_wildcard)
 
     def __eq__(self, other):
         return self.character == other.character and \
@@ -98,8 +97,6 @@ class Letter:
     def details(self):
         detail = self.character + " x:" + str(self.y+1) + " y:" + str(self.x+1) + \
           " pt-val:" + str(self.point_value)
-        if self.is_on_board:
-            detail += " on_board=True"
         if self.is_wildcard:
             detail += " wildcard=True"
         return detail
@@ -159,13 +156,13 @@ def accumulate_board_letters(board):
     for i in range(len(board)):
         for j in range(len(board[i])):
             if board[i][j] != ' ':
-                letters.append(Letter(board[i][j], i, j, True))
+                letters.append(Letter(board[i][j], i, j))
     return letters
 
 def accumulate_hand_letters(hand):
     letters = []
     for letter in hand:
-        letters.append(Letter(letter, -1, -1, False, letter == '*'))
+        letters.append(Letter(letter, -1, -1, wildcard=letter == '*'))
     return letters
 
 def generate_possible_words(board, board_letters, hand_letters):
@@ -267,30 +264,30 @@ def generate_horizontal_words(board, hand, cur_anchor_pos, all_anchor_pos, cross
     def add_legal_move(seq):
         generated_valid_words.append(seq)
     
-    def extend_right(cur_seq, (x, y), board, hand):
+    def extend_right(cur_seq, (x, y), board, hand, did_place_letter=False):
         cur_string  = "".join([letter.character for letter in cur_seq])
         if x >= BOARD_SZ:
-            if cur_string in valid_words:
+            if cur_string in valid_words and did_place_letter:
                 add_legal_move(cur_seq)
             return
         if board[x][y] == ' ':
-            if cur_string in valid_words:
+            if cur_string in valid_words and did_place_letter:
                 add_legal_move(cur_seq)
             for i, letter in enumerate(hand):
                 if letter.character in startstring_suffix_letters.get(cur_string, []) and \
                     letter.character in cross_section[x][y]:
                     remaining_hand = hand[:i] + hand[i+1:]
                     extend_right(cur_seq+[Letter(letter.character, x, y)], 
-                                 (x+1, y), board, remaining_hand)
+                                 (x+1, y), board, remaining_hand, True)
         else:
             if board[x][y] in startstring_suffix_letters.get(cur_string, []):
                 extend_right(cur_seq+[Letter(board[x][y], x, y)], 
-                             (x+1, y), board, hand)      
+                             (x+1, y), board, hand, did_place_letter)
     
-    def extend_left(cur_seq, (x, y), board, hand, limit):
+    def extend_left(cur_seq, (x, y), board, hand, limit, did_place_letter=False):
         cur_string = "".join([letter.character for letter in cur_seq])
         if cur_string in startstring_suffix_letters:
-            extend_right([], (x, y), board, hand)
+            extend_right([], (x, y), board, hand, did_place_letter)
         if limit > 0:
             for i, letter in enumerate(hand):
                 if letter.character in midstring_prefix_letters.get(cur_string, []) and \
@@ -298,7 +295,7 @@ def generate_horizontal_words(board, hand, cur_anchor_pos, all_anchor_pos, cross
                     remaining_hand = hand[:i] + hand[i+1:]
                     board[x][y] = letter.character
                     extend_left([Letter(letter.character, x, y)]+cur_seq, 
-                                (x-1, y), board, remaining_hand, limit-1)
+                                (x-1, y), board, remaining_hand, limit-1, True)
                     board[x][y] = ' '
 
     if k == 0 and anchor_x-1 >= 0:
@@ -317,30 +314,30 @@ def generate_vertical_words(board, hand, cur_anchor_pos, all_anchor_pos, cross_s
     def add_legal_move(seq):
         generated_valid_words.append(seq)
     
-    def extend_down(cur_seq, (x, y), board, hand):
+    def extend_down(cur_seq, (x, y), board, hand, did_place_letter=False):
         cur_string  = "".join([letter.character for letter in cur_seq])
         if y >= BOARD_SZ:
-            if cur_string in valid_words:
+            if cur_string in valid_words and did_place_letter:
                 add_legal_move(cur_seq)
             return
         if board[x][y] == ' ':
-            if cur_string in valid_words:
+            if cur_string in valid_words and did_place_letter:
                 add_legal_move(cur_seq)
             for i, letter in enumerate(hand):
                 if letter.character in startstring_suffix_letters.get(cur_string, []) and \
                     letter.character in cross_section[x][y]:
                     remaining_hand = hand[:i] + hand[i+1:]
                     extend_down(cur_seq+[Letter(letter.character, x, y)], 
-                                 (x, y+1), board, remaining_hand)
+                                 (x, y+1), board, remaining_hand, True)
         else:
             if board[x][y] in startstring_suffix_letters.get(cur_string, []):
                 extend_down(cur_seq+[Letter(board[x][y], x, y)], 
-                             (x, y+1), board, hand)      
+                             (x, y+1), board, hand, did_place_letter)
     
-    def extend_up(cur_seq, (x, y), board, hand, limit):
+    def extend_up(cur_seq, (x, y), board, hand, limit, did_place_letter=False):
         cur_string = "".join([letter.character for letter in cur_seq])
         if cur_string in startstring_suffix_letters:
-            extend_down([], (x, y), board, hand)
+            extend_down([], (x, y), board, hand, did_place_letter)
         if limit > 0:
             for i, letter in enumerate(hand):
                 if letter.character in midstring_prefix_letters.get(cur_string, []) and \
@@ -348,7 +345,7 @@ def generate_vertical_words(board, hand, cur_anchor_pos, all_anchor_pos, cross_s
                     remaining_hand = hand[:i] + hand[i+1:]
                     board[x][y] = letter.character
                     extend_up([Letter(letter.character, x, y)]+cur_seq, 
-                                (x, y-1), board, remaining_hand, limit-1)
+                                (x, y-1), board, remaining_hand, limit-1, True)
                     board[x][y] = ' '
 
     if k == 0 and anchor_y-1 >= 0:
@@ -366,12 +363,10 @@ def get_whole_horizontal_word(board, word):
     left_x -= 1
   while right_x < BOARD_SZ-1 and board[right_x+1][y] != ' ':
     right_x += 1
-  horizontal_word, count = [], 0
+  horizontal_word = []
   for index, i in enumerate(range(left_x, right_x+1)):
-    while count < len(word) and word[count].is_on_board:
-      count += 1
     if board[i][y] != ' ':
-      horizontal_word.append(Letter(board[i][y], i, y, is_on_board=True))
+      horizontal_word.append(Letter(board[i][y], i, y))
     else:
       horizontal_word.append(copy.copy(word[offset+index]))
   return horizontal_word
@@ -386,7 +381,7 @@ def get_whole_vertical_word(board, word):
   vertical_word = []
   for index, i in enumerate(range(top_y, bottom_y+1)):
     if board[x][i] != ' ':
-      vertical_word.append(Letter(board[x][i], x, i, is_on_board=True))
+      vertical_word.append(Letter(board[x][i], x, i))
     else:
       vertical_word.append(copy.copy(word[offset+index]))
   return vertical_word
