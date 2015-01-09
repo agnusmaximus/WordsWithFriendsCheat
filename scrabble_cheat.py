@@ -137,8 +137,20 @@ def generate_all_vertical_words(board, board_letter, hand_letters):
     vertical_words = [determine_vertical_placements(x) for x in vertical_words]
     vertical_words = [x for x in vertical_words if x]
     return vertical_words
+
+def generate_all_words_no_restrictions(board, hand_letters):
+    candidates = form_words_no_restrictions(hand_letters)
+    for candidate in candidates:
+        first_letter = candidate[0]
+        first_letter.x = first_letter.y = 7
+    candidates = [determine_horizontal_placements(x) for x in candidates]
+    candidates = [x for x in candidates if x]
+    return candidates
     
 def generate_possible_words(board, board_letters, hand_letters):
+    if board_letters == []:
+        return generate_all_words_no_restrictions(board, hand_letters)
+        
     possible_words = []
     for board_letter in board_letters:
         vertical_words = generate_all_vertical_words(board, board_letter, hand_letters)
@@ -259,6 +271,31 @@ def form_vertical_words(board, board_letter, hand, used_board_letter=False,
                                    cur_word + board_letter.character)
     return sol
 
+def form_words_no_restrictions(hand, cur_word_list=[], cur_word=""):
+    sol = []
+    if not trie.has_keys_with_prefix(unicode(cur_word)):
+        return sol
+    if unicode(cur_word) in trie:
+        sol.append([copy.copy(x) for x in cur_word_list])
+    if hand == []:
+        return sol
+    
+    for i, letter in enumerate(hand):
+        new_hand = hand[:i] + hand[i+1:]
+        partial_solution = []
+        if letter.character == '*':
+            for wildcard in list("abcdefghijklmnopqrstuvwxyz"):
+                partial_solution += \
+                form_words_no_restrictions(new_hand, 
+                                           cur_word_list+[Letter(wildcard, -1, -1)],
+                                           cur_word+wildcard)
+
+        else:
+            partial_solution += form_words_no_restrictions(new_hand,
+                                                           cur_word_list+[letter],
+                                                           cur_word+letter.character)
+        sol += partial_solution
+    return sol
     
 def determine_vertical_placements(letters):
     letter_on_board, index = None, -1
