@@ -287,7 +287,7 @@ def form_words_no_restrictions(hand, cur_word_list=[], cur_word=""):
             for wildcard in list("abcdefghijklmnopqrstuvwxyz"):
                 partial_solution += \
                 form_words_no_restrictions(new_hand, 
-                                           cur_word_list+[Letter(wildcard, -1, -1)],
+                                           cur_word_list+[Letter(wildcard, -1, -1, wildcard=True)],
                                            cur_word+wildcard)
 
         else:

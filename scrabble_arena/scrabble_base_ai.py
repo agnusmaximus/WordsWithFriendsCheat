@@ -28,6 +28,10 @@ class scrabble_base_ai:
             self.board[letter.x][letter.y] = letter.character
             if not letter.is_on_board:
                 if not letter.is_wildcard:
+                    if not letter.character in self.hand:
+                        print(letter.details())
+                        print(self.hand)
+                    assert(letter.character in self.hand)
                     self.hand.remove(letter.character)
                 else:
                     self.hand.remove('*')

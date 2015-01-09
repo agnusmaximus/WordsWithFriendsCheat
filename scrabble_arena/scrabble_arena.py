@@ -5,7 +5,7 @@ import scrabble_base_ai
 import scrabble_unoptimal_ai
 import random
 
-N_MATCHES = 2
+N_MATCHES = 40
 
 SCRABBLE_BOARD_FILE = "scrabble_board.txt"
 SCRABBLE_CONFIG_FILE = "scrabble_board_config.txt"
@@ -14,7 +14,7 @@ PLAYER_2_FILE = "2.txt"
 
 ultimate_letter_bag = list("a"*9 + "b"*2 + "c"*2 + "d"*5 + "e"*13 + "f"*2 + "g"*3 + "h"*4 + "i"*8 + \
                            "j"*1 + "k"*1 + "l"*4 + "m"*2 + "n"*5 + "o"*8 + "p"*2 + "q"*1 + "r"*6 + "s"*5 + \
-                           "t"*7 + "u"*4 + "v"*2 + "w"*2 + "x"*1 + "y"*2 + "z"*1)
+                           "t"*7 + "u"*4 + "v"*2 + "w"*2 + "x"*1 + "y"*2 + "z"*1 + "*"*2)
 letter_bag = ""
 
 def refill_tiles():
@@ -72,8 +72,8 @@ if __name__=="__main__":
         refill_tiles()
 
         p1 = scrabble_base_ai.scrabble_base_ai(SCRABBLE_BOARD_FILE, SCRABBLE_CONFIG_FILE, PLAYER_1_FILE)
-        #p2 = scrabble_unoptimal_ai.scrabble_unoptimal_ai(SCRABBLE_BOARD_FILE, SCRABBLE_CONFIG_FILE, PLAYER_2_FILE)
-        p2 = scrabble_base_ai.scrabble_base_ai(SCRABBLE_BOARD_FILE, SCRABBLE_CONFIG_FILE, PLAYER_2_FILE)
+        p2 = scrabble_unoptimal_ai.scrabble_unoptimal_ai(SCRABBLE_BOARD_FILE, SCRABBLE_CONFIG_FILE, PLAYER_2_FILE)
+        #p2 = scrabble_base_ai.scrabble_base_ai(SCRABBLE_BOARD_FILE, SCRABBLE_CONFIG_FILE, PLAYER_2_FILE)
         p1_score, p2_score = 0, 0
 
         while len(letter_bag) != 0 or (len(get_tiles(PLAYER_1_FILE)) > 0 and len(get_tiles(PLAYER_2_FILE)) > 0):
