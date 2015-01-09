@@ -8,16 +8,18 @@ class scrabble_base_ai:
         self.config_file_name = config_file_name
         self.hand_file_name = hand_file_name
 
+    def generate_move_internal(self):
+        candidates = scrabble_cheat.generate_word_candidates(self.board, self.config, self.hand)
+        if candidates == []:
+            return None
+        return candidates[0]
 
     def generate_move(self):
         self.board = scrabble_cheat.read_board(self.board_file_name)
         self.config = scrabble_cheat.read_board_config(self.config_file_name)
         self.hand = scrabble_cheat.read_hand(self.hand_file_name)
         scrabble_cheat.update_score_multipliers(self.board, self.config)
-        candidates = scrabble_cheat.generate_word_candidates(self.board, self.config, self.hand)
-        if len(candidates) == 0:
-            return None
-        return candidates[0]
+        return self.generate_move_internal()
 
     def make_move(self, move):
         if move == None:

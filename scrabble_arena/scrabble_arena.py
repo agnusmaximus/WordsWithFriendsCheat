@@ -2,6 +2,7 @@ from __future__ import print_function
 import sys
 import scrabble_cheat
 import scrabble_base_ai
+import scrabble_unoptimal_ai
 import random
 
 SCRABBLE_BOARD_FILE = "scrabble_board.txt"
@@ -60,6 +61,7 @@ if __name__=="__main__":
     clear_player_hand_files()
 
     p1 = scrabble_base_ai.scrabble_base_ai(SCRABBLE_BOARD_FILE, SCRABBLE_CONFIG_FILE, PLAYER_1_FILE)
+    #p2 = scrabble_unoptimal_ai.scrabble_unoptimal_ai(SCRABBLE_BOARD_FILE, SCRABBLE_CONFIG_FILE, PLAYER_2_FILE)
     p2 = scrabble_base_ai.scrabble_base_ai(SCRABBLE_BOARD_FILE, SCRABBLE_CONFIG_FILE, PLAYER_2_FILE)
     p1_score, p2_score = 0, 0
 
