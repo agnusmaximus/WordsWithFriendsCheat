@@ -10,7 +10,6 @@ BOARD_SZ = 15
 POINT_VALS = {'a' : 1, 'b' : 4, 'c' : 4, 'd' : 2, 'e' : 1, 'f' : 4, 'g' : 3, 'h' : 3, 'i' : 1, \
               'j' : 10, 'k' : 5, 'l' : 2, 'm' : 4, 'n' : 2, 'o' : 1, 'p' : 4, 'q' : 10, 'r' : 1, \
               's' : 1, 't' : 1, 'u' : 2, 'v' : 5, 'w' : 4, 'x' : 8, 'y' : 3, 'z' : 10, '*' : 0}
-trie = None
 
 ######################################################################
 # TRIE STUFF
@@ -22,6 +21,7 @@ def init_trie(dict_file_path):
         line = line.strip().lower()
         vals += [unicode(line)]
     return Trie("<HH", zip(vals, [(1, 1) for x in range(len(vals))]))
+trie = init_trie("dict.txt")
 
 ######################################################################
 # SCRABBLE LETTER CLASS
@@ -75,6 +75,7 @@ def read_board(board_file_path, op=get_scrabble_char):
     board = []
     for line in board_file:
         board.append([op(x) for x in list(line.strip())])
+    board_file.close()
     return board
 
 def read_board_config(board_config_file_path):
@@ -82,7 +83,9 @@ def read_board_config(board_config_file_path):
 
 def read_hand(scrabble_hand_file_path):
     f = open(scrabble_hand_file_path, "r")
-    return [get_scrabble_char(x) for x in list(f.readline().strip())]
+    return_value = [get_scrabble_char(x) for x in list(f.readline().strip())]
+    f.close()
+    self.board_file = board_file
 
 ######################################################################
 # MISC
@@ -406,7 +409,6 @@ if __name__ == "__main__":
     board = read_board("scrabble_board.txt")
     config =  read_board_config("scrabble_board_config.txt")
     hand = read_hand("scrabble_hand.txt")
-    trie = init_trie("dict.txt")
     update_score_multipliers(board, config)
     word_candidates = generate_word_candidates(board, config, hand)
     if len(word_candidates) == 0:
