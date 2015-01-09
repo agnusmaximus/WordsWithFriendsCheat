@@ -205,7 +205,7 @@ def get_num_non_anchor_pos(dirx, diry, x, y, all_anchor_pos, board):
     return k
 
 def generate_vertical_cross_section(hand_letters, board_letters, board):
-    hand_set = set([x.character for x in hand_letters])
+    hand_set = set("abcdefghijklmnopqrstuvwxyz")
     cross_section = [[None for x in range(BOARD_SZ)] for y in range(BOARD_SZ)]
     for board_letter in board_letters:
         board_character, x, y = board_letter.character, board_letter.x, board_letter.y
@@ -231,7 +231,7 @@ def generate_vertical_cross_section(hand_letters, board_letters, board):
     return cross_section
 
 def generate_horizontal_cross_section(hand_letters, board_letters, board):
-    hand_set = set([x.character for x in hand_letters])
+    hand_set = set("abcdefghijklmnopqrstuvwxyz")
     cross_section = [[None for x in range(BOARD_SZ)] for y in range(BOARD_SZ)]
     for board_letter in board_letters:
         board_character, x, y = board_letter.character, board_letter.x, board_letter.y
@@ -274,11 +274,19 @@ def generate_horizontal_words(board, hand, cur_anchor_pos, all_anchor_pos, cross
             if cur_string in valid_words and did_place_letter:
                 add_legal_move(cur_seq)
             for i, letter in enumerate(hand):
-                if letter.character in startstring_suffix_letters.get(cur_string, []) and \
-                    letter.character in cross_section[x][y]:
-                    remaining_hand = hand[:i] + hand[i+1:]
-                    extend_right(cur_seq+[Letter(letter.character, x, y)], 
-                                 (x+1, y), board, remaining_hand, True)
+                if letter.is_wildcard:
+                    wildcard_candidate_chars = \
+                      startstring_suffix_letters.get(cur_string, set()).intersection(cross_section[x][y])
+                    for wildcard in wildcard_candidate_chars:
+                        remaining_hand = hand[:i] + hand[i+1:]
+                        extend_right(cur_seq+[Letter(wildcard, x, y, wildcard=True)],
+                                     (x+1, y), board, remaining_hand, True)
+                else:
+                    if letter.character in startstring_suffix_letters.get(cur_string, []) and \
+                        letter.character in cross_section[x][y]:
+                        remaining_hand = hand[:i] + hand[i+1:]
+                        extend_right(cur_seq+[Letter(letter.character, x, y)], 
+                                     (x+1, y), board, remaining_hand, True)
         else:
             if board[x][y] in startstring_suffix_letters.get(cur_string, []):
                 extend_right(cur_seq+[Letter(board[x][y], x, y)], 
@@ -290,13 +298,23 @@ def generate_horizontal_words(board, hand, cur_anchor_pos, all_anchor_pos, cross
             extend_right([], (x, y), board, hand, did_place_letter)
         if limit > 0:
             for i, letter in enumerate(hand):
-                if letter.character in midstring_prefix_letters.get(cur_string, []) and \
-                  letter.character in cross_section[x][y]:
-                    remaining_hand = hand[:i] + hand[i+1:]
-                    board[x][y] = letter.character
-                    extend_left([Letter(letter.character, x, y)]+cur_seq, 
-                                (x-1, y), board, remaining_hand, limit-1, True)
-                    board[x][y] = ' '
+                if letter.is_wildcard:
+                    wildcard_candidate_chars = \
+                      midstring_prefix_letters.get(cur_string, set()).intersection(cross_section[x][y])
+                    for wildcard in wildcard_candidate_chars:
+                        remaining_hand = hand[:i] + hand[i+1:]
+                        board[x][y] = wildcard
+                        extend_left([Letter(wildcard, x, y, wildcard=True)]+cur_seq,
+                                    (x-1, y), board, remaining_hand, limit-1, True)
+                        board[x][y] = ' '
+                else:
+                    if letter.character in midstring_prefix_letters.get(cur_string, []) and \
+                      letter.character in cross_section[x][y]:
+                      remaining_hand = hand[:i] + hand[i+1:]
+                      board[x][y] = letter.character
+                      extend_left([Letter(letter.character, x, y)]+cur_seq, 
+                                  (x-1, y), board, remaining_hand, limit-1, True)
+                      board[x][y] = ' '
 
     if k == 0 and anchor_x-1 >= 0:
         while anchor_x > 0 and board[anchor_x-1][anchor_y] != ' ':
@@ -324,15 +342,23 @@ def generate_vertical_words(board, hand, cur_anchor_pos, all_anchor_pos, cross_s
             if cur_string in valid_words and did_place_letter:
                 add_legal_move(cur_seq)
             for i, letter in enumerate(hand):
-                if letter.character in startstring_suffix_letters.get(cur_string, []) and \
-                    letter.character in cross_section[x][y]:
-                    remaining_hand = hand[:i] + hand[i+1:]
-                    extend_down(cur_seq+[Letter(letter.character, x, y)], 
-                                 (x, y+1), board, remaining_hand, True)
+                if letter.is_wildcard:
+                    wildcard_candidate_chars = \
+                      startstring_suffix_letters.get(cur_string, set()).intersection(cross_section[x][y])
+                    for wildcard in wildcard_candidate_chars:
+                        remaining_hand = hand[:i] + hand[i+1:]
+                        extend_down(cur_seq+[Letter(wildcard, x, y, wildcard=True)],
+                                    (x, y+1), board, remaining_hand, True)
+                else:
+                    if letter.character in startstring_suffix_letters.get(cur_string, []) and \
+                        letter.character in cross_section[x][y]:
+                        remaining_hand = hand[:i] + hand[i+1:]
+                        extend_down(cur_seq+[Letter(letter.character, x, y)], 
+                                    (x, y+1), board, remaining_hand, True)
         else:
             if board[x][y] in startstring_suffix_letters.get(cur_string, []):
                 extend_down(cur_seq+[Letter(board[x][y], x, y)], 
-                             (x, y+1), board, hand, did_place_letter)
+                            (x, y+1), board, hand, did_place_letter)
     
     def extend_up(cur_seq, (x, y), board, hand, limit, did_place_letter=False):
         cur_string = "".join([letter.character for letter in cur_seq])
@@ -340,14 +366,24 @@ def generate_vertical_words(board, hand, cur_anchor_pos, all_anchor_pos, cross_s
             extend_down([], (x, y), board, hand, did_place_letter)
         if limit > 0:
             for i, letter in enumerate(hand):
-                if letter.character in midstring_prefix_letters.get(cur_string, []) and \
-                  letter.character in cross_section[x][y]:
-                    remaining_hand = hand[:i] + hand[i+1:]
-                    board[x][y] = letter.character
-                    extend_up([Letter(letter.character, x, y)]+cur_seq, 
-                                (x, y-1), board, remaining_hand, limit-1, True)
-                    board[x][y] = ' '
-
+                if letter.is_wildcard:
+                    wildcard_candidate_chars = \
+                      midstring_prefix_letters.get(cur_string, set()).intersection(cross_section[x][y])
+                    for wildcard in wildcard_candidate_chars:
+                        remaining_hand = hand[:i] + hand[i+1:]
+                        board[x][y] = wildcard
+                        extend_up([Letter(wildcard, x, y, wildcard=True)]+cur_seq,
+                                  (x, y-1), board, remaining_hand, limit-1, True)
+                        board[x][y] = ' '
+                else:
+                    if letter.character in midstring_prefix_letters.get(cur_string, []) and \
+                      letter.character in cross_section[x][y]:
+                        remaining_hand = hand[:i] + hand[i+1:]
+                        board[x][y] = letter.character
+                        extend_up([Letter(letter.character, x, y)]+cur_seq, 
+                                  (x, y-1), board, remaining_hand, limit-1, True)
+                        board[x][y] = ' '
+                    
     if k == 0 and anchor_y-1 >= 0:
         while anchor_y > 0 and board[anchor_x][anchor_y-1] != ' ':
             anchor_y -= 1

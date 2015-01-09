@@ -74,8 +74,8 @@ if __name__=="__main__":
 
         p1 = scrabble_base_ai.scrabble_base_ai(SCRABBLE_BOARD_FILE, SCRABBLE_CONFIG_FILE, PLAYER_1_FILE)
         #p2 = scrabble_unoptimal_ai.scrabble_unoptimal_ai(SCRABBLE_BOARD_FILE, SCRABBLE_CONFIG_FILE, PLAYER_2_FILE)
-        #p2 = scrabble_base_ai.scrabble_base_ai(SCRABBLE_BOARD_FILE, SCRABBLE_CONFIG_FILE, PLAYER_2_FILE)
-        p2 = scrabble_suboptimal_ai.scrabble_suboptimal_ai(SCRABBLE_BOARD_FILE, SCRABBLE_CONFIG_FILE, PLAYER_2_FILE)
+        p2 = scrabble_base_ai.scrabble_base_ai(SCRABBLE_BOARD_FILE, SCRABBLE_CONFIG_FILE, PLAYER_2_FILE)
+        #p2 = scrabble_suboptimal_ai.scrabble_suboptimal_ai(SCRABBLE_BOARD_FILE, SCRABBLE_CONFIG_FILE, PLAYER_2_FILE)
         p1_score, p2_score = 0, 0
 
         while len(letter_bag) != 0 or (len(get_tiles(PLAYER_1_FILE)) > 0 and len(get_tiles(PLAYER_2_FILE)) > 0):
