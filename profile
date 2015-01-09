@@ -2,75 +2,76 @@
 -Filtering words...
 -Scoring words...
 --------------------------------------------------------------
-[([r, e, a, m, s], 22), ([r, o, a, m, s], 22), ([t, e, r, m, s], 22), ([t, e, e, m, s], 22), ([t, e, a, m, s], 22), ([t, r, a, m, s], 22), ([t, e, e, m, s], 22), ([t, e, r, m, s], 22), ([t, e, a, m, s], 22), ([a, t, o, m, s], 22), ([r, e, m, s], 21), ([r, a, m, s], 21), ([r, o, m, s], 21), ([t, a, m, s], 21), ([t, o, m, s], 21), ([a, r, m, s], 21), ([s, o, u, t, e, r], 20), ([e, m, s], 20), ([o, m, s], 20), ([o, u, t, e, r], 19), ([a, e, r, a, t, e], 18), ([r, o, u, t, e], 17), ([s, a, u, t, e], 17), ([r, a, t, o, s], 17), ([a, u, t, o], 16), ([w, a, l, l, o, w, e, r], 16), ([a, x, e], 16), ([l, o, w, e, r], 16), ([y, e, a, r], 15), ([y, e, a, s], 15), ([y, e, a, r], 15), ([y, e, a, s], 15), ([w, a, l, l, o, w, s], 15), ([a, l, l, o, w, s], 15), ([l, o, w, s], 15), ([r, o, t, a, s], 15), ([t, o, r, a, s], 15), ([s, e, t, a, e], 15), ([s, t, o, a, e], 15), ([s, e, t, a, e], 15), ([a, r, e, a, s], 15), ([a, r, e, a, e], 15), ([a, r, e, a, s], 15), ([t, o, r, s, o], 15), ([u, t, a], 14), ([t, a, r, e, s], 14), ([t, a, r, o, s], 14), ([t, a, r, e, s], 14), ([t, a, r, o, s], 14), ([r, e, s, e, a, u], 14)]
+[([b, a, z, o, o, s], 60), ([b, a, z, o, o], 57), ([b, o, z, o, s], 57), ([b, o, z, o], 54), ([a, d, z], 39), ([b, o, g, u, s], 24), ([b, a, u, d], 21), ([g, a, u, d], 19), ([z, a, g, s], 17), ([s, h, o, c, k, s], 17), ([d, u, b], 16), ([z, a, g], 16), ([z, o, o, s], 15), ([s, a, w], 15), ([s, o, w], 15), ([s, u, b], 14), ([a, z, o], 14), ([z, o, a], 14), ([z, o, o], 14), ([z, o, a], 14), ([z, o, o], 14), ([u, d, o, s], 12), ([s, n, o, t], 12), ([b, u, d], 11), ([d, u, o], 10), ([b, u, s], 9), ([b, r, o, a, d], 9), ([e, d], 9), ([s, u, l, u, s], 8), ([u, l, u, s], 8), ([s, a, u], 8), ([s, o, u], 8), ([o, u, d], 8), ([u, s], 8), ([l, a], 8), ([l, o], 8), ([a, w], 8), ([o, w], 8), ([e, o, n, s], 7), ([o, n, s], 7), ([v, a, s], 7), ([o, b, i], 6), ([i, f, s], 6), ([e, s], 6), ([u, d, o], 5), ([e, s], 5), ([u, s], 5), ([r, o, a, d], 5), ([a, b], 5), ([n, a], 5)]
 --------------------------------------------------------------
-Score: 22
-r x:14 y:1 pt-val:1
-e x:14 y:2 pt-val:1
-a x:14 y:3 pt-val:1
-m x:14 y:4 pt-val:4 on_board=True
-s x:14 y:5 pt-val:1
+Score: 60
+b x:12 y:1 pt-val:4
+a x:12 y:2 pt-val:1
+z x:12 y:3 pt-val:10 on_board=True
+o x:12 y:4 pt-val:1
+o x:12 y:5 pt-val:1
+s x:12 y:6 pt-val:1
 --------------------------------------------------------------
 All newly formed words:
-reams
-fivers
+bazoos
 --------------------------------------------------------------
-         2395841 function calls (2076150 primitive calls) in 2.519 seconds
+         1425844 function calls (1115902 primitive calls) in 2.366 seconds
 
    Ordered by: internal time
 
    ncalls  tottime  percall  cumtime  percall filename:lineno(function)
-161449/49    0.412    0.000    0.748    0.015 scrabble_cheat.py:207(form_vertical_words)
-158340/49    0.405    0.000    0.659    0.013 scrabble_cheat.py:163(form_horizontal_words)
-        1    0.370    0.370    0.474    0.474 scrabble_cheat.py:18(init_trie)
-   319789    0.337    0.000    0.337    0.000 {method 'has_keys_with_prefix' of 'marisa_trie._Trie' objects}
-   163924    0.156    0.000    0.156    0.000 scrabble_cheat.py:30(__init__)
-   132570    0.111    0.000    0.240    0.000 scrabble_cheat.py:37(__copy__)
-   132570    0.086    0.000    0.446    0.000 copy.py:66(copy)
-   132570    0.077    0.000    0.343    0.000 copy.py:123(_copy_inst)
-    13009    0.049    0.000    0.133    0.000 scrabble_cheat.py:294(get_whole_horizontal_word)
-    12933    0.043    0.000    0.127    0.000 scrabble_cheat.py:311(get_whole_vertical_word)
-     4724    0.043    0.000    0.289    0.000 scrabble_cheat.py:346(causes_other_invalid_words)
-   172875    0.042    0.000    0.042    0.000 {method 'lower' of 'str' objects}
-     6175    0.037    0.000    0.302    0.000 scrabble_cheat.py:326(get_all_newly_formed_seq)
-        1    0.033    0.033    0.033    0.033 {zip}
-   126455    0.030    0.000    0.030    0.000 {method 'pop' of 'list' objects}
-   126455    0.030    0.000    0.030    0.000 {method 'insert' of 'list' objects}
-     4887    0.028    0.000    0.103    0.000 scrabble_cheat.py:254(determine_vertical_placements)
-        1    0.027    0.027    1.624    1.624 scrabble_cheat.py:126(generate_possible_words)
-   132570    0.026    0.000    0.026    0.000 {hasattr}
-   172850    0.026    0.000    0.026    0.000 {method 'strip' of 'str' objects}
-     4005    0.023    0.000    0.086    0.000 scrabble_cheat.py:274(determine_horizontal_placements)
-        1    0.021    0.021    2.036    2.036 scrabble_cheat.py:99(generate_word_candidates)
-        1    0.019    0.019    0.309    0.309 scrabble_cheat.py:143(filter_words)
-   143657    0.019    0.000    0.019    0.000 {method 'append' of 'list' objects}
-   132570    0.016    0.000    0.016    0.000 {method 'get' of 'dict' objects}
-    25975    0.013    0.000    0.013    0.000 {range}
-     1450    0.010    0.000    0.081    0.000 scrabble_cheat.py:372(score)
-        1    0.008    0.008    2.519    2.519 scrabble_cheat.py:1(<module>)
-     1679    0.006    0.000    0.007    0.000 scrabble_cheat.py:353(score_individual_word)
-    39030    0.006    0.000    0.006    0.000 scrabble_cheat.py:51(__str__)
-    56490    0.005    0.000    0.005    0.000 {len}
-     9251    0.002    0.000    0.002    0.000 {method 'join' of 'str' objects}
-     3736    0.002    0.000    0.002    0.000 scrabble_cheat.py:40(__eq__)
-        1    0.001    0.001    0.001    0.001 {sorted}
-     1679    0.000    0.000    0.000    0.000 {reduce}
-        2    0.000    0.000    0.000    0.000 scrabble_cheat.py:73(read_board)
-      225    0.000    0.000    0.000    0.000 scrabble_cheat.py:81(<lambda>)
-     1450    0.000    0.000    0.000    0.000 scrabble_cheat.py:108(<lambda>)
-        1    0.000    0.000    0.000    0.000 scrabble_cheat.py:112(accumulate_board_letters)
-      239    0.000    0.000    0.000    0.000 scrabble_cheat.py:48(__repr__)
-        1    0.000    0.000    0.000    0.000 scrabble_cheat.py:90(update_score_multipliers)
-        4    0.000    0.000    0.000    0.000 {open}
-      232    0.000    0.000    0.000    0.000 scrabble_cheat.py:66(get_scrabble_char)
-        1    0.000    0.000    0.000    0.000 scrabble_cheat.py:382(print_word_candidate)
-        5    0.000    0.000    0.000    0.000 scrabble_cheat.py:54(details)
-        1    0.000    0.000    0.000    0.000 scrabble_cheat.py:120(accumulate_hand_letters)
-        1    0.000    0.000    0.000    0.000 scrabble_cheat.py:83(read_hand)
-        1    0.000    0.000    0.000    0.000 scrabble_cheat.py:80(read_board_config)
-        1    0.000    0.000    0.000    0.000 scrabble_cheat.py:29(Letter)
+        1    0.517    0.517    0.650    0.650 scrabble_cheat.py:17(init_trie)
+153317/103    0.471    0.000    0.744    0.007 scrabble_cheat.py:186(form_horizontal_words)
+156831/103    0.465    0.000    0.736    0.007 scrabble_cheat.py:230(form_vertical_words)
+   310148    0.382    0.000    0.382    0.000 {method 'has_keys_with_prefix' of 'marisa_trie._Trie' objects}
+    80257    0.097    0.000    0.097    0.000 scrabble_cheat.py:30(__init__)
+    58442    0.058    0.000    0.130    0.000 scrabble_cheat.py:37(__copy__)
+   172929    0.049    0.000    0.049    0.000 {method 'lower' of 'str' objects}
+    58442    0.047    0.000    0.239    0.000 copy.py:66(copy)
+        1    0.046    0.046    0.046    0.046 {zip}
+    58442    0.041    0.000    0.185    0.000 copy.py:123(_copy_inst)
+   172850    0.034    0.000    0.034    0.000 {method 'strip' of 'str' objects}
+     2528    0.016    0.000    0.055    0.000 scrabble_cheat.py:300(determine_vertical_placements)
+        1    0.014    0.014    1.705    1.705 scrabble_cheat.py:102(generate_word_candidates)
+     2250    0.014    0.000    0.049    0.000 scrabble_cheat.py:320(determine_horizontal_placements)
+    58442    0.013    0.000    0.013    0.000 {hasattr}
+     2197    0.013    0.000    0.032    0.000 scrabble_cheat.py:340(get_whole_horizontal_word)
+     1234    0.013    0.000    0.079    0.000 scrabble_cheat.py:392(causes_other_invalid_words)
+     2136    0.011    0.000    0.028    0.000 scrabble_cheat.py:357(get_whole_vertical_word)
+        1    0.010    0.010    2.366    2.366 scrabble_cheat.py:1(<module>)
+    58442    0.008    0.000    0.008    0.000 {method 'get' of 'dict' objects}
+     1329    0.007    0.000    0.068    0.000 scrabble_cheat.py:372(get_all_newly_formed_seq)
+    46809    0.007    0.000    0.007    0.000 {method 'append' of 'list' objects}
+        1    0.007    0.007    0.086    0.086 scrabble_cheat.py:166(filter_words)
+        1    0.007    0.007    1.600    1.600 scrabble_cheat.py:150(generate_possible_words)
+     4366    0.006    0.000    0.006    0.000 {range}
+      103    0.005    0.000    0.797    0.008 scrabble_cheat.py:135(generate_all_vertical_words)
+      103    0.004    0.000    0.797    0.008 scrabble_cheat.py:129(generate_all_horizontal_words)
+     8755    0.001    0.000    0.001    0.000 scrabble_cheat.py:51(__str__)
+    12314    0.001    0.000    0.001    0.000 {len}
+       94    0.001    0.000    0.004    0.000 scrabble_cheat.py:418(score)
+     1939    0.000    0.000    0.000    0.000 {method 'join' of 'str' objects}
+        2    0.000    0.000    0.001    0.000 scrabble_cheat.py:73(read_board)
+      126    0.000    0.000    0.000    0.000 scrabble_cheat.py:399(score_individual_word)
+      225    0.000    0.000    0.000    0.000 scrabble_cheat.py:82(<lambda>)
+        1    0.000    0.000    0.000    0.000 scrabble_cheat.py:115(accumulate_board_letters)
         1    0.000    0.000    0.000    0.000 {method 'readline' of 'file' objects}
-        1    0.000    0.000    0.000    0.000 scrabble_cheat.py:393(candidate_contains_wildcard)
+        4    0.000    0.000    0.000    0.000 {open}
+        1    0.000    0.000    0.000    0.000 scrabble_cheat.py:93(update_score_multipliers)
+      126    0.000    0.000    0.000    0.000 {reduce}
+      145    0.000    0.000    0.000    0.000 scrabble_cheat.py:40(__eq__)
+      232    0.000    0.000    0.000    0.000 scrabble_cheat.py:66(get_scrabble_char)
+        1    0.000    0.000    0.000    0.000 {sorted}
+        3    0.000    0.000    0.000    0.000 {method 'close' of 'file' objects}
+        1    0.000    0.000    0.000    0.000 scrabble_cheat.py:428(print_word_candidate)
+      165    0.000    0.000    0.000    0.000 scrabble_cheat.py:48(__repr__)
+        1    0.000    0.000    0.000    0.000 scrabble_cheat.py:84(read_hand)
+       94    0.000    0.000    0.000    0.000 scrabble_cheat.py:111(<lambda>)
+        1    0.000    0.000    0.000    0.000 scrabble_cheat.py:123(accumulate_hand_letters)
+        6    0.000    0.000    0.000    0.000 scrabble_cheat.py:54(details)
+        1    0.000    0.000    0.000    0.000 scrabble_cheat.py:29(Letter)
+        1    0.000    0.000    0.001    0.001 scrabble_cheat.py:81(read_board_config)
+        1    0.000    0.000    0.000    0.000 scrabble_cheat.py:439(candidate_contains_wildcard)
         1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
 
 
