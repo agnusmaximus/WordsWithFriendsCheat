@@ -5,15 +5,22 @@ import scrabble_base_ai
 import scrabble_unoptimal_ai
 import random
 
+N_MATCHES = 2
+
 SCRABBLE_BOARD_FILE = "scrabble_board.txt"
 SCRABBLE_CONFIG_FILE = "scrabble_board_config.txt"
 PLAYER_1_FILE = "1.txt"
 PLAYER_2_FILE = "2.txt"
 
-letter_bag = list("a"*9 + "b"*2 + "c"*2 + "d"*5 + "e"*13 + "f"*2 + "g"*3 + "h"*4 + "i"*8 + \
-                  "j"*1 + "k"*1 + "l"*4 + "m"*2 + "n"*5 + "o"*8 + "p"*2 + "q"*1 + "r"*6 + "s"*5 + \
-                  "t"*7 + "u"*4 + "v"*2 + "w"*2 + "x"*1 + "y"*2 + "z"*1)
+ultimate_letter_bag = list("a"*9 + "b"*2 + "c"*2 + "d"*5 + "e"*13 + "f"*2 + "g"*3 + "h"*4 + "i"*8 + \
+                           "j"*1 + "k"*1 + "l"*4 + "m"*2 + "n"*5 + "o"*8 + "p"*2 + "q"*1 + "r"*6 + "s"*5 + \
+                           "t"*7 + "u"*4 + "v"*2 + "w"*2 + "x"*1 + "y"*2 + "z"*1)
+letter_bag = ""
 
+def refill_tiles():
+    global letter_bag
+    letter_bag = list(ultimate_letter_bag)
+                  
 def clear_board_file():
     empty_line = '0'*15
     f = open(SCRABBLE_BOARD_FILE, "w")
@@ -57,35 +64,49 @@ def print_board():
     f.close()
     
 if __name__=="__main__":
-    clear_board_file()
-    clear_player_hand_files()
+    p1_n_wins, p2_n_wins = 0, 0
+    p1_tot_score, p2_tot_score = 0, 0
+    for i in range(N_MATCHES):
+        clear_board_file()
+        clear_player_hand_files()
+        refill_tiles()
 
-    p1 = scrabble_base_ai.scrabble_base_ai(SCRABBLE_BOARD_FILE, SCRABBLE_CONFIG_FILE, PLAYER_1_FILE)
-    #p2 = scrabble_unoptimal_ai.scrabble_unoptimal_ai(SCRABBLE_BOARD_FILE, SCRABBLE_CONFIG_FILE, PLAYER_2_FILE)
-    p2 = scrabble_base_ai.scrabble_base_ai(SCRABBLE_BOARD_FILE, SCRABBLE_CONFIG_FILE, PLAYER_2_FILE)
-    p1_score, p2_score = 0, 0
+        p1 = scrabble_base_ai.scrabble_base_ai(SCRABBLE_BOARD_FILE, SCRABBLE_CONFIG_FILE, PLAYER_1_FILE)
+        #p2 = scrabble_unoptimal_ai.scrabble_unoptimal_ai(SCRABBLE_BOARD_FILE, SCRABBLE_CONFIG_FILE, PLAYER_2_FILE)
+        p2 = scrabble_base_ai.scrabble_base_ai(SCRABBLE_BOARD_FILE, SCRABBLE_CONFIG_FILE, PLAYER_2_FILE)
+        p1_score, p2_score = 0, 0
 
-    while len(letter_bag) != 0 or (len(get_tiles(PLAYER_1_FILE)) > 0 and len(get_tiles(PLAYER_2_FILE)) > 0):
-        refill_hands(PLAYER_1_FILE)
-        p1_move = p1.generate_move()
-        p1_did_make_move = p1_move != None
-        p1_score += p1.make_move(p1_move)
-        refill_hands(PLAYER_2_FILE)
-        p2_move = p2.generate_move()
-        p2_did_make_move = p2_move != None
-        p2_score += p2.make_move(p2_move)
+        while len(letter_bag) != 0 or (len(get_tiles(PLAYER_1_FILE)) > 0 and len(get_tiles(PLAYER_2_FILE)) > 0):
+            refill_hands(PLAYER_1_FILE)
+            p1_move = p1.generate_move()
+            p1_did_make_move = p1_move != None
+            p1_score += p1.make_move(p1_move)
+            refill_hands(PLAYER_2_FILE)
+            p2_move = p2.generate_move()
+            p2_did_make_move = p2_move != None
+            p2_score += p2.make_move(p2_move)
 
-        print("P1: " + str(p1_score) + " P2: " + str(p2_score))
-        print_board()
+            print("P1: " + str(p1_score) + " P2: " + str(p2_score))
+            print_board()
         
-        if not p1_did_make_move and not p2_did_make_move:
-            break
+            if not p1_did_make_move and not p2_did_make_move:
+                break
 
-    if p1_score > p2_score:
-        print("P1 WINS")
-    elif p1_score < p2_score:
-        print("P2 WINS")
-    else:
-        print("TIE")
+        if p1_score > p2_score:
+            print("P1 WINS")
+            p1_n_wins += 1
+        elif p1_score < p2_score:
+            print("P2 WINS")
+            p2_n_wins += 1
+        else:
+            print("TIE")
+
+        p1_tot_score += p1_score
+        p2_tot_score += p2_score
+        
+    print("Match Statistics:")
+    print("P1 Wins: " + str(p1_n_wins) + " P2 Wins: " + str(p2_n_wins))
+    print("P1 Avg Score: " + str(float(p1_tot_score) / N_MATCHES) + " " + \
+          "P2 Avg Score: " + str(float(p2_tot_score) / N_MATCHES))
     
     
