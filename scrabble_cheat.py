@@ -85,7 +85,7 @@ def read_hand(scrabble_hand_file_path):
     f = open(scrabble_hand_file_path, "r")
     return_value = [get_scrabble_char(x) for x in list(f.readline().strip())]
     f.close()
-    self.board_file = board_file
+    return return_value
 
 ######################################################################
 # MISC
