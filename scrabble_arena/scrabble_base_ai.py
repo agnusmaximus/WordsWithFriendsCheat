@@ -14,9 +14,13 @@ class scrabble_base_ai:
 
     def generate_move(self):
         candidates = scrabble_cheat.generate_word_candidates(self.board, self.config, self.hand)
+        if len(candidates) == 0:
+            return None
         return candidates[0]
 
     def make_move(self, move):
+        if move == None:
+            return
         for letter in move[0]:
             self.board[letter.x][letter.y] = letter.character
             if not letter.is_on_board:
@@ -24,17 +28,28 @@ class scrabble_base_ai:
                     self.hand.remove(letter.character)
                 else:
                     self.hand.remove('*')
-        
         self.write_hand_to_file()
-        #self.write_board_to_file()
+        self.write_board_to_file()
 
-    def write_hand_to_file():
+    def write_hand_to_file(self):
         f = open(self.hand_file_name, "w")
         print("".join(self.hand), file=f)
         f.close()
-        
 
-base = scrabble_base_ai("scrabble_board.txt", "scrabble_board_config.txt", "scrabble_hand.txt")
-move = base.generate_move()
-print(move)
-base.make_move(move)
+    def write_board_to_file(self):
+        f = open(self.board_file_name, "w")
+        for i in range(len(self.board)):
+            line = ''
+            for j in range(len(self.board[i])):
+                if self.board[i][j] == ' ':
+                    line += '0'
+                else:
+                    line += self.board[i][j]
+            print(line, file=f)
+        f.close()
+
+if __name__=="__main__":
+    base = scrabble_base_ai("scrabble_board.txt", "scrabble_board_config.txt", "scrabble_hand.txt")
+    move = base.generate_move()
+    base.make_move(move)
+    print(move)
