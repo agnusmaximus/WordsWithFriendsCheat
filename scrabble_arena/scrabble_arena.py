@@ -6,7 +6,7 @@ import scrabble_unoptimal_ai
 import scrabble_suboptimal_ai
 import random
 
-N_MATCHES = 5
+N_MATCHES = 100
 
 SCRABBLE_BOARD_FILE = "scrabble_board.txt"
 SCRABBLE_CONFIG_FILE = "scrabble_board_config.txt"

@@ -3,7 +3,7 @@ import os
 import copy
 from itertools import groupby
 from operator import mul
-import cPickle as pickle
+import marshal
 
 # Score multipliers
 BOARD_SZ = 15
@@ -56,14 +56,14 @@ def init_aux_data():
             add_aux_data(line)
         midstring_prefix_letters[""] = set("abcdefghijklmnopqrstuvwxyz")
         startstring_suffix_letters[""] = set("abcdefghijklmnopqrstuvwxyz")
-        pickle.dump(valid_words, open(VALID_WORDS_FILE, "wb"))
-        pickle.dump(startstring_suffix_letters, open(STARTSTRING_SUFFIX_LETTERS_FILE, "wb"))
-        pickle.dump(midstring_prefix_letters, open(MIDSTRING_PREFIX_LETTERS_FILE, "wb"))
+        marshal.dump(valid_words, open(VALID_WORDS_FILE, "wb"))
+        marshal.dump(startstring_suffix_letters, open(STARTSTRING_SUFFIX_LETTERS_FILE, "wb"))
+        marshal.dump(midstring_prefix_letters, open(MIDSTRING_PREFIX_LETTERS_FILE, "wb"))
     else:
         print("Loading aux data from files...")
-        valid_words = pickle.load(open(VALID_WORDS_FILE, "rb"))
-        startstring_suffix_letters = pickle.load(open(STARTSTRING_SUFFIX_LETTERS_FILE, "rb"))
-        midstring_prefix_letters = pickle.load(open(MIDSTRING_PREFIX_LETTERS_FILE, "rb"))
+        valid_words = marshal.load(open(VALID_WORDS_FILE, "rb"))
+        startstring_suffix_letters = marshal.load(open(STARTSTRING_SUFFIX_LETTERS_FILE, "rb"))
+        midstring_prefix_letters = marshal.load(open(MIDSTRING_PREFIX_LETTERS_FILE, "rb"))
 
 init_aux_data()
 
