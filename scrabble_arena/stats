@@ -12,3 +12,7 @@ P2 suboptimal
 Match Statistics:
 P1 Wins: 30 P2 Wins: 10
 P1 Avg Score: 423.3 P2 Avg Score: 363.075
+
+# new alg
+P1 Wins: 20 P2 Wins: 20
+P1 Avg Score: 450.35 P2 Avg Score: 462.95

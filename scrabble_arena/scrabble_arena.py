@@ -6,7 +6,7 @@ import scrabble_unoptimal_ai
 import scrabble_suboptimal_ai
 import random
 
-N_MATCHES = 40
+N_MATCHES = 5
 
 SCRABBLE_BOARD_FILE = "scrabble_board.txt"
 SCRABBLE_CONFIG_FILE = "scrabble_board_config.txt"
@@ -87,9 +87,6 @@ if __name__=="__main__":
             p2_move = p2.generate_move()
             p2_did_make_move = p2_move != None
             p2_score += p2.make_move(p2_move)
-
-            print("P1: " + str(p1_score) + " P2: " + str(p2_score))
-            print_board()
         
             if not p1_did_make_move and not p2_did_make_move:
                 break
@@ -102,6 +99,9 @@ if __name__=="__main__":
             p2_n_wins += 1
         else:
             print("TIE")
+            
+        print("P1: " + str(p1_score) + " P2: " + str(p2_score))
+        print_board()
 
         p1_tot_score += p1_score
         p2_tot_score += p2_score

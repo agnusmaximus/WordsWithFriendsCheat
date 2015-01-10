@@ -295,7 +295,8 @@ def generate_horizontal_words(board, hand, cur_anchor_pos, all_anchor_pos, cross
     def extend_left(cur_seq, (x, y), board, hand, limit, did_place_letter=False):
         cur_string = "".join([letter.character for letter in cur_seq])
         if cur_string in startstring_suffix_letters:
-            extend_right([], (x, y), board, hand, did_place_letter)
+            extend_right(cur_seq, (x+len(cur_seq)+int(did_place_letter), y), 
+                         board, hand, did_place_letter)
         if limit > 0:
             for i, letter in enumerate(hand):
                 if letter.is_wildcard:
@@ -363,7 +364,8 @@ def generate_vertical_words(board, hand, cur_anchor_pos, all_anchor_pos, cross_s
     def extend_up(cur_seq, (x, y), board, hand, limit, did_place_letter=False):
         cur_string = "".join([letter.character for letter in cur_seq])
         if cur_string in startstring_suffix_letters:
-            extend_down([], (x, y), board, hand, did_place_letter)
+            extend_down(cur_seq, (x, y+len(cur_seq)+int(did_place_letter)), 
+                        board, hand, did_place_letter)
         if limit > 0:
             for i, letter in enumerate(hand):
                 if letter.is_wildcard:
