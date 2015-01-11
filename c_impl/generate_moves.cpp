@@ -258,6 +258,24 @@ string wordAccumulate(vector<letter> &seq) {
 /***************************************************
  * SEARCH                                          *
  ***************************************************/
+bool visited(string curString, position pos, int xdir, int ydir) {
+  static map<string, map<int, bool> > mem;
+  xdir += 1;
+  ydir += 1;
+  int positionHash = pos.x * 100 + pos.y;
+  int dirHash = xdir * 10 + ydir;
+  int hash = positionHash * 100 + dirHash;
+  bool res = false;
+  if (mem.find(curString) != mem.end() &&
+      mem[curString].find(hash) != mem[curString].end()) {
+    res = mem[curString][hash];
+  }
+  else {
+    mem[curString][hash] = true;
+  }
+  return res;
+}
+
 unordered_set<position, positionHash, positionCompare> generateAnchorPositions(char board[BOARD_SZ][BOARD_SZ]) {
   unordered_set<position, positionHash, positionCompare> anchorPositions;
   for (int i = 0; i < BOARD_SZ; i++) {
@@ -296,15 +314,20 @@ int getNumNonAnchorPos(int xdir, int ydir, position anchorPos, char board[BOARD_
   }
   return k;
 }
+
 void extendForward(vector<letter> &partialSolution, position pos, char board[BOARD_SZ][BOARD_SZ],
                    multiset<char> &hand, set<char> cross[BOARD_SZ][BOARD_SZ], bool didPlaceLetter,
                    int xdir, int ydir, vector<vector<letter> > &sol) {
   string curString = wordAccumulate(partialSolution);
+  
+  if (visited(curString, pos, xdir, ydir)) {
+    return;
+  }
   if (validWords.find(curString) != validWords.end() && didPlaceLetter) {
+    sol.push_back(partialSolution);
     if (curString.size() == 15) {
       cout << curString << endl;
     }
-    sol.push_back(partialSolution);
   }
   if (pos.y >= BOARD_SZ) {
     return;
@@ -312,7 +335,7 @@ void extendForward(vector<letter> &partialSolution, position pos, char board[BOA
   if (pos.x >= BOARD_SZ) {
     return;
   }
-
+  
   if (board[pos.x][pos.y] == '0') {
     for (char letter : hand) {
       if (startstringSuffixLetters[curString].find(letter) != startstringSuffixLetters[curString].end() &&
@@ -341,6 +364,9 @@ void extendBackward(vector<letter> &partialSolution, position pos, char board[BO
                     multiset<char> &hand, int limit, set<char> cross[BOARD_SZ][BOARD_SZ],
                     bool didPlaceLetter, int xdir, int ydir, vector<vector<letter> > &sol) {
   string curString = wordAccumulate(partialSolution);
+  if (visited(curString, pos, xdir, ydir)) {
+    return;
+  }
   if (startstringSuffixLetters.find(curString) != startstringSuffixLetters.end() &&
       startstringSuffixLetters[curString].size() != 0) {
     int nextx = pos.x, nexty = pos.y;
