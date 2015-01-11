@@ -1,5 +1,6 @@
 #include <iostream>
 #include <set>
+#include <unordered_set>
 #include <vector>
 #include <map>
 #include <string>
@@ -11,19 +12,48 @@
 #include <boost/serialization/string.hpp>
 #include <boost/archive/binary_iarchive.hpp>
 #include <boost/archive/binary_oarchive.hpp>
+#include <boost/tr1/functional.hpp>
+#include <sys/time.h>
 
 using namespace std;
 
+#define DEBUG 1
+#define DEBUG_PRINT(message) if (DEBUG) cout << message << " t=" << getTimeMillis()-baseTime << endl;
+
+long int baseTime;
+const int NORM=1, DL=2, TL=3, DW=4, TW=5;
 const char * DATASTRUCTURE_BINARY_FILE = "datastructures.bin";
 const int N_MAX_HAND_LETTERS = 7;
 const int BOARD_SZ = 15;
 
 set<char> letterSet = {'a','b','c','d','e','f','g','h','i','j','k','l',
-                       'm','n','o','p','q','r','s','t','u','v','w','x','y','z'};
-
+                                 'm','n','o','p','q','r','s','t','u','v','w','x','y','z'};
 map<string, set<char> > midstringPrefixLetters, startstringSuffixLetters;
 map<string, set<char> > validWordPrefixLetters, validWordSuffixLetters;
 set<string> validWords;
+
+struct position {
+  int x, y;
+};
+typedef struct position positions;
+
+struct positionCompare {
+  bool operator() (const position &a, const position &b) const {
+    return a.x == b.x && a.y == b.y;
+  }
+};
+
+struct positionHash {
+  size_t operator() (const position &a) const { 
+    return a.x * 100 + a.y;
+  }
+};
+
+struct letter {
+  char character;
+  position pos;
+};
+typedef struct letter letter;
 
 /***************************************************
  * DATASTRUCTURE INITIALIZATION                    *
@@ -85,13 +115,37 @@ void initBoard(string boardFileName, char board[BOARD_SZ][BOARD_SZ]) {
   in.close();
 }
 
-void initHand(string handFileName, set<char> &hand) {
+void initHand(string handFileName, multiset<char> &hand) {
   ifstream in(handFileName.c_str());
   char curLetter;
   while (in >> curLetter) {
     hand.insert(curLetter);
   }
   in.close();
+}
+
+void initScoreMultipliers(string boardConfigFileName, 
+                          int scoreMultipliers[BOARD_SZ][BOARD_SZ]) {
+  ifstream in(boardConfigFileName.c_str());
+  int multiplier = -1;
+  for (int i = 0; i < BOARD_SZ; i++) {
+    for (int j = 0; j < BOARD_SZ; j++) {
+      in >> multiplier;
+      scoreMultipliers[i][j] = multiplier-'0';
+    }
+  }
+  in.close();
+}
+ 
+void updateScoreMultiplieres(char board[BOARD_SZ][BOARD_SZ], 
+                             int scoreMultipliers[BOARD_SZ][BOARD_SZ]) {
+  for (int i = 0; i < BOARD_SZ; i++) {
+    for (int j = 0; j < BOARD_SZ; j++) {
+      if (board[i][j] != '0') {
+        scoreMultipliers[i][j] = NORM;
+      }
+    }
+  }
 }
 
 void initVerticalCrossSections(char board[BOARD_SZ][BOARD_SZ], 
@@ -152,6 +206,39 @@ void initHorizontalCrossSections(char board[BOARD_SZ][BOARD_SZ],
 }
 
 /***************************************************
+ * SEARCH                                          *
+ ***************************************************/
+unordered_set<position, 
+              positionHash, 
+              positionCompare> generateAnchorPositions(char board[BOARD_SZ][BOARD_SZ]) {
+  unordered_set<position, positionHash, positionCompare> anchorPositions;
+  for (int i = 0; i < BOARD_SZ; i++) {
+    for (int j = 0; j < BOARD_SZ; j++) {
+      if (board[i][j] != '0') {
+        for (int x = i-1; x <= i+1; x++) {
+          for (int y = j-1; y <= j+1; y++) {
+            if (x >= 0 && y >=0 &&
+                x < BOARD_SZ && y < BOARD_SZ) {
+              anchorPositions.insert((position){i, j});
+            }
+          }
+        }
+      }
+    }
+  }
+  return anchorPositions;
+}
+ 
+set<vector<letter> > generateValidWords(char board[BOARD_SZ][BOARD_SZ], multiset<char> &hand, 
+                                        set<char> verticalCrossSections[BOARD_SZ][BOARD_SZ], 
+                                        set<char> horizontalCrossSection[BOARD_SZ][BOARD_SZ]) {
+  unordered_set<position, positionHash, positionCompare> anchorPositions = generateAnchorPositions(board);
+  set<vector<letter> > validWords;
+  
+  return validWords;
+}
+
+/***************************************************
  * DEBUG OPERATIONS                                *
  ***************************************************/
 void printCharSet(set<char> &charSet) {
@@ -170,7 +257,15 @@ void printBoard(char board[BOARD_SZ][BOARD_SZ]) {
   }
 }
 
+long int getTimeMillis() {
+  struct timeval tp;
+  gettimeofday(&tp, NULL);
+  return tp.tv_sec * 1000 + tp.tv_usec / 1000;
+}
+
 int main(int argc, char *argv[]) {
+  baseTime = getTimeMillis();
+
   if (argc != 5) {
     printf("Usage: %s [board_file_name] [board_config_file_name] [hand_file_name] [dictionary_file_name]\n", argv[0]);
     return 0;
@@ -181,15 +276,23 @@ int main(int argc, char *argv[]) {
   string dictFileName = argv[4];
   
   char board[BOARD_SZ][BOARD_SZ];
-  set<char> hand;
+  int scoreMultipliers[BOARD_SZ][BOARD_SZ];
+  multiset<char> hand;
   set<char> verticalCrossSections[BOARD_SZ][BOARD_SZ];
   set<char> horizontalCrossSections[BOARD_SZ][BOARD_SZ];
   
+  DEBUG_PRINT("Initializing Data Structures...");
   initDataStructures(dictFileName);
+  DEBUG_PRINT("Initializing Board Properties...");
   initBoard(boardFileName, board);
   initHand(handFileName, hand);
+  initScoreMultipliers(boardConfigFileName, scoreMultipliers);
+  updateScoreMultiplieres(board, scoreMultipliers);
   initVerticalCrossSections(board, verticalCrossSections);
   initHorizontalCrossSections(board, horizontalCrossSections);
-  
-  
+  DEBUG_PRINT("Generating Words...");
+  set<vector<letter> > validWords = generateValidWords(board, hand, 
+                                                    verticalCrossSections,
+                                                    horizontalCrossSections);
+  DEBUG_PRINT("Done.");
 }
