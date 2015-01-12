@@ -1,0 +1,67 @@
+--------------------------------------------------------------------------------
+Profile data file 'callgrind.out.31979.1' (creator: callgrind-3.10.0)
+--------------------------------------------------------------------------------
+I1 cache: 
+D1 cache: 
+LL cache: 
+Timerange: Basic block 0 - 6171887
+Trigger: Client Request
+Profiled target:  ./a.out ../scrabble_board.txt ../scrabble_board_config.txt ../scrabble_hand.txt ../dict.txt (PID 31979, part 1)
+Events recorded:  Ir
+Events shown:     Ir
+Event sort order: Ir
+Thresholds:       99
+Include dirs:     
+User annotated:   
+Auto-annotation:  off
+
+--------------------------------------------------------------------------------
+        Ir 
+--------------------------------------------------------------------------------
+26,143,161  PROGRAM TOTALS
+
+--------------------------------------------------------------------------------
+       Ir  file:function
+--------------------------------------------------------------------------------
+6,948,817  ???:_platform_memcmp [/usr/lib/system/libsystem_platform.dylib]
+2,937,558  ???:extendForward(std::vector<letter, std::allocator<letter> >&, position, char (*) [15], std::multiset<char, std::less<char>, std::allocator<char> >&, std::set<char, std::less<char>, std::allocator<char> > (*) [15], bool, int, int, std::vector<std::vector<letter, std::allocator<letter> >, std::allocator<std::vector<letter, std::allocator<letter> > > >&)'2 [./a.out]
+2,364,337  ???:szone_free_definite_size [/usr/lib/system/libsystem_malloc.dylib]
+1,640,569  ???:tiny_malloc_from_free_list [/usr/lib/system/libsystem_malloc.dylib]
+1,450,467  ???:visited(std::string, position, int, int) [./a.out]
+1,442,358  ???:tiny_free_list_add_ptr [/usr/lib/system/libsystem_malloc.dylib]
+1,225,853  ???:szone_size [/usr/lib/system/libsystem_malloc.dylib]
+1,114,809  ???:extendBackward(std::vector<letter, std::allocator<letter> >&, position, char (*) [15], std::multiset<char, std::less<char>, std::allocator<char> >&, int, std::set<char, std::less<char>, std::allocator<char> > (*) [15], bool, int, int, std::vector<std::vector<letter, std::allocator<letter> >, std::allocator<std::vector<letter, std::allocator<letter> > > >&)'2 [./a.out]
+1,050,744  ???:szone_malloc_should_clear [/usr/lib/system/libsystem_malloc.dylib]
+  847,102  ???:extendForward(std::vector<letter, std::allocator<letter> >&, position, char (*) [15], std::multiset<char, std::less<char>, std::allocator<char> >&, std::set<char, std::less<char>, std::allocator<char> > (*) [15], bool, int, int, std::vector<std::vector<letter, std::allocator<letter> >, std::allocator<std::vector<letter, std::allocator<letter> > > >&) [./a.out]
+  563,940  ???:free [/usr/lib/system/libsystem_malloc.dylib]
+  419,132  ???:malloc_zone_malloc [/usr/lib/system/libsystem_malloc.dylib]
+  417,912  ???:std::_Rb_tree<std::string, std::string, std::_Identity<std::string>, std::less<std::string>, std::allocator<std::string> >::find(std::string const&) [clone .constprop.851] [./a.out]
+  385,369  ???:_GLOBAL__sub_I_extended_type_info_typeid.cpp [./a.out]
+  299,380  ???:malloc [/usr/lib/system/libsystem_malloc.dylib]
+  266,085  ???:tiny_free_list_remove_ptr [/usr/lib/system/libsystem_malloc.dylib]
+  231,357  ???:get_tiny_previous_free_msize [/usr/lib/system/libsystem_malloc.dylib]
+  229,233  ???:extendBackward(std::vector<letter, std::allocator<letter> >&, position, char (*) [15], std::multiset<char, std::less<char>, std::allocator<char> >&, int, std::set<char, std::less<char>, std::allocator<char> > (*) [15], bool, int, int, std::vector<std::vector<letter, std::allocator<letter> >, std::allocator<std::vector<letter, std::allocator<letter> > > >&) [./a.out]
+  203,082  ???:wordAccumulate(std::vector<letter, std::allocator<letter> >&) [./a.out]
+  168,647  ???:get_tiny_free_size [/usr/lib/system/libsystem_malloc.dylib]
+  164,659  ???:operator new(unsigned long) [/usr/local/Cellar/gcc49/4.9.2_1/lib/gcc/4.9/libstdc++.6.dylib]
+  137,520  ???:spin_lock [/usr/lib/system/libsystem_platform.dylib]
+  126,452  ???:std::_Rb_tree<char, char, std::_Identity<char>, std::less<char>, std::allocator<char> >::_M_copy(std::_Rb_tree_node<char> const*, std::_Rb_tree_node<char>*)'2 [./a.out]
+  116,538  ???:std::string::_Rep::_M_clone(std::allocator<char> const&, unsigned long) [/usr/local/Cellar/gcc49/4.9.2_1/lib/gcc/4.9/libstdc++.6.dylib]
+  114,759  ???:std::string::reserve(unsigned long) [/usr/local/Cellar/gcc49/4.9.2_1/lib/gcc/4.9/libstdc++.6.dylib]
+  113,520  ???:std::_Rb_tree<char, char, std::_Identity<char>, std::less<char>, std::allocator<char> >::_M_copy(std::_Rb_tree_node<char> const*, std::_Rb_tree_node<char>*) [./a.out]
+  106,945  ???:std::_Rb_tree<char, char, std::_Identity<char>, std::less<char>, std::allocator<char> >::_M_erase(std::_Rb_tree_node<char>*) [./a.out]
+   95,713  ???:std::_Rb_tree_rebalance_for_erase(std::_Rb_tree_node_base*, std::_Rb_tree_node_base&) [/usr/local/Cellar/gcc49/4.9.2_1/lib/gcc/4.9/libstdc++.6.dylib]
+   94,291  ???:std::_Rb_tree_insert_and_rebalance(bool, std::_Rb_tree_node_base*, std::_Rb_tree_node_base*, std::_Rb_tree_node_base&) [/usr/local/Cellar/gcc49/4.9.2_1/lib/gcc/4.9/libstdc++.6.dylib]
+   83,220  ???:std::string::_Rep::_S_create(unsigned long, unsigned long, std::allocator<char> const&) [/usr/local/Cellar/gcc49/4.9.2_1/lib/gcc/4.9/libstdc++.6.dylib]
+   82,512  ???:spin_unlock [/usr/lib/system/libsystem_platform.dylib]
+   74,845  ???:szone_malloc [/usr/lib/system/libsystem_malloc.dylib]
+   57,251  ???:std::_Rb_tree_increment(std::_Rb_tree_node_base const*) [/usr/local/Cellar/gcc49/4.9.2_1/lib/gcc/4.9/libstdc++.6.dylib]
+   55,864  ???:std::_Rb_tree<int, std::pair<int const, bool>, std::_Select1st<std::pair<int const, bool> >, std::less<int>, std::allocator<std::pair<int const, bool> > >::_M_get_insert_hint_unique_pos(std::_Rb_tree_const_iterator<std::pair<int const, bool> >, int const&) [./a.out]
+   48,408  ???:std::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string(char const*, std::allocator<char> const&) [/usr/local/Cellar/gcc49/4.9.2_1/lib/gcc/4.9/libstdc++.6.dylib]
+   43,929  ???:ImageLoaderMachOCompressed::trieWalk(unsigned char const*, unsigned char const*, char const*) [/usr/lib/dyld]
+   42,479  ???:append_int [/usr/lib/system/libsystem_malloc.dylib]
+   38,384  ???:std::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string(std::string const&) [/usr/local/Cellar/gcc49/4.9.2_1/lib/gcc/4.9/libstdc++.6.dylib]
+   36,306  ???:strlen [/usr/lib/system/libsystem_c.dylib]
+   33,457  ???:_platform_memmove$VARIANT$Unknown [/usr/lib/system/libsystem_platform.dylib]
+   25,538  ???:generateAnchorPositions(char (*) [15]) [./a.out]
+

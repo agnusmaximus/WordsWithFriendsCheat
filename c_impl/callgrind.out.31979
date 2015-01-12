@@ -1,0 +1,20 @@
+version: 1
+creator: callgrind-3.10.0
+pid: 31979
+cmd:  ./a.out ../scrabble_board.txt ../scrabble_board_config.txt ../scrabble_hand.txt ../dict.txt
+part: 2
+
+
+desc: I1 cache: 
+desc: D1 cache: 
+desc: LL cache: 
+
+desc: Timerange: Basic block 6171887 - 6171888
+desc: Trigger: Program termination
+
+positions: line
+events: Ir
+summary: 0
+
+
+totals: 0

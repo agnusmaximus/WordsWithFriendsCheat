@@ -16,6 +16,7 @@
 #include <sys/time.h>
 #include <thread>
 #include <omp.h>
+#include <valgrind/callgrind.h>
 
 using namespace std;
 
@@ -220,7 +221,6 @@ void initVerticalCrossSections(char board[BOARD_SZ][BOARD_SZ],
   }
 }
 
-
 void initHorizontalCrossSections(char board[BOARD_SZ][BOARD_SZ], 
                                  set<char> horizontalCrossSections[BOARD_SZ][BOARD_SZ]) {
   for (int i = 0; i < BOARD_SZ; i++) {
@@ -259,7 +259,7 @@ string wordAccumulate(vector<letter> &seq) {
 /***************************************************
  * SEARCH                                          *
  ***************************************************/
-bool visited(string curString, position pos, int xdir, int ydir) {
+bool visited(string &curString, position pos, int xdir, int ydir) {
   static map<string, map<int, bool> > mem;
   xdir += 1;
   ydir += 1;
@@ -483,9 +483,12 @@ int main(int argc, char *argv[]) {
   initHorizontalCrossSections(board, horizontalCrossSections);
 
   DEBUG_PRINT("Generating Words...");
+  CALLGRIND_START_INSTRUMENTATION;
   vector<vector<letter> > validWords = generateValidWords(board, hand, 
                                                           verticalCrossSections,
                                                           horizontalCrossSections);
+  CALLGRIND_STOP_INSTRUMENTATION;
+  CALLGRIND_DUMP_STATS;
   cout << validWords.size() << endl;
   DEBUG_PRINT("Done.");
 }

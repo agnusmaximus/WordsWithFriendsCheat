@@ -1,0 +1,2224 @@
+version: 1
+creator: callgrind-3.10.0
+pid: 31979
+cmd:  ./a.out ../scrabble_board.txt ../scrabble_board_config.txt ../scrabble_hand.txt ../dict.txt
+part: 1
+
+
+desc: I1 cache: 
+desc: D1 cache: 
+desc: LL cache: 
+
+desc: Timerange: Basic block 0 - 6171887
+desc: Trigger: Client Request
+
+positions: line
+events: Ir
+summary: 0
+
+
+ob=(1) /usr/local/Cellar/gcc49/4.9.2_1/lib/gcc/4.9/libstdc++.6.dylib
+fl=(4) ???
+fn=(86) operator delete(void*)
+0 25064
+cob=(11) /usr/lib/system/libsystem_malloc.dylib
+cfi=(6) ???
+cfn=(88) free
+calls=12532 0 
+0 5883673
+
+fn=(174) std::string::reserve(unsigned long)
+0 58254
+cfn=(176) std::string::_Rep::_M_clone(std::allocator<char> const&, unsigned long)
+calls=4161 0 
+0 1322086
+0 51741
+cfn=(48) std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >::_Rep::_M_dispose(std::allocator<wchar_t> const&) [clone .part.23]
+calls=2382 0 
+0 912398
+0 4764
+
+fn=(194) std::_Rb_tree_decrement(std::_Rb_tree_node_base*)
+0 1254
+cfn=(196) std::local_Rb_tree_decrement(std::_Rb_tree_node_base*)
+calls=1254 0 
+0 19365
+
+fn=(138) __cxa_guard_release
+0 7
+cfn=(48)
+calls=1 0 
+0 27
+0 2
+cfn=(48)
+calls=1 0 
+0 143
+0 7
+cfn=(48)
+calls=1 0 
+0 27
+0 2
+cfn=(48)
+calls=1 0 
+0 94
+0 4
+cfn=(48)
+calls=1 0 
+0 213
+0 6
+
+fn=(180) std::_Rb_tree_increment(std::_Rb_tree_node_base const*)
+0 57251
+
+fn=(118) __cxa_guard_acquire
+0 16
+cfn=(48)
+calls=1 0 
+0 27
+0 2
+cfn=(48)
+calls=1 0 
+0 143
+0 9
+cfn=(48)
+calls=1 0 
+0 213
+0 5
+
+fn=(196)
+0 19365
+
+fn=(216) std::basic_ostream<char, std::char_traits<char> >& std::__ostream_insert<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*, long)
+0 14
+cfn=(218) std::ostream::sentry::sentry(std::ostream&)
+calls=1 0 
+0 23
+0 30
+cfn=(220) __gnu_cxx::stdio_sync_filebuf<char, std::char_traits<char> >::xsputn(char const*, long)
+calls=1 0 
+0 561
+0 6
+
+fn=(218)
+0 46
+
+fn=(234) std::ostream::put(char)
+0 10
+cfn=(218)
+calls=1 0 
+0 23
+0 23
+cfn=(236) __gnu_cxx::stdio_sync_filebuf<char, std::char_traits<char> >::overflow(int)
+calls=1 0 
+0 539
+0 2
+
+fn=(114) std::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string(std::string const&)
+0 38384
+
+fn=(176)
+0 37449
+cfn=(178) std::string::_Rep::_S_create(unsigned long, unsigned long, std::allocator<char> const&)
+calls=4161 0 
+0 1179874
+0 30675
+cfn=(48)
+calls=908 0 
+0 25674
+0 48414
+
+fn=(178)
+0 66576
+cfn=(48)
+calls=4161 0 
+0 1096654
+0 16644
+
+fn=(48)
+0 2382
+cfn=(86)
+calls=2382 0 
+0 910016
+0 4161
+cfn=(56) operator new(unsigned long)
+calls=4161 0 
+0 1092493
+0 5
+cob=(23) /usr/lib/system/libsystem_m.dylib
+cfi=(5) ???
+cfn=(54) trunc$fenv_access_off
+calls=4 0 
+0 8
+0 4
+cob=(23)
+cfi=(5)
+cfn=(54)
+calls=3 0 
+0 6
+0 10808
+cob=(11)
+cfi=(6)
+cfn=(58) malloc
+calls=10808 0 
+0 3084817
+0 908
+cob=(9) /usr/lib/system/libsystem_platform.dylib
+cfi=(7) ???
+cfn=(192) _platform_memmove$VARIANT$Unknown
+calls=908 0 
+0 24766
+0 1
+cob=(3) /usr/lib/system/libsystem_pthread.dylib
+cfi=(9) ???
+cfn=(140) pthread_cond_broadcast
+calls=1 0 
+0 93
+0 2
+cob=(3)
+cfi=(9)
+cfn=(122) pthread_mutex_lock
+calls=2 0 
+0 284
+0 2
+cob=(3)
+cfi=(9)
+cfn=(134) pthread_mutex_unlock
+calls=2 0 
+0 424
+0 3
+cob=(3)
+cfi=(9)
+cfn=(120) pthread_once
+calls=3 0 
+0 78
+0 2017
+cob=(5) /usr/lib/system/libsystem_c.dylib
+cfi=(8) ???
+cfn=(110) strlen
+calls=2017 0 
+0 36306
+0 6
+cob=(16) /usr/lib/system/libdyld.dylib
+cfi=(2) ???
+cfn=(8) dyld_stub_binder
+calls=1 0 
+0 17726
+cob=(16)
+cfi=(2)
+cfn=(9) dyld_stub_binder'2
+calls=1 0 
+0 16835
+0 4
+
+fn=(49) std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >::_Rep::_M_dispose(std::allocator<wchar_t> const&) [clone .part.23]'2
+0 4161
+cob=(11)
+cfi=(6)
+cfn=(58)
+calls=4161 0 
+0 1042561
+
+fn=(56)
+0 104783
+cfn=(49)
+calls=4161 0 
+0 1046722
+cfn=(48)
+calls=10808 0 
+0 3095625
+0 59876
+
+fn=(166) std::_Rb_tree_rebalance_for_erase(std::_Rb_tree_node_base*, std::_Rb_tree_node_base&)
+0 58804
+cfn=(168) std::local_Rb_tree_rotate_right(std::_Rb_tree_node_base*, std::_Rb_tree_node_base*&)
+calls=70 0 
+0 980
+0 2709
+cfn=(170) std::local_Rb_tree_rotate_left(std::_Rb_tree_node_base*, std::_Rb_tree_node_base*&)
+calls=6 0 
+0 78
+0 164
+cfn=(170)
+calls=41 0 
+0 697
+0 13464
+cfn=(168)
+calls=35 0 
+0 479
+0 17994
+cfn=(168)
+calls=41 0 
+0 697
+0 2578
+
+fn=(168)
+0 11630
+
+fn=(252) std::ostream::flush()
+0 9
+cfn=(254) __gnu_cxx::stdio_sync_filebuf<char, std::char_traits<char> >::sync()
+calls=1 0 
+0 408
+0 5
+
+fn=(254)
+0 3
+cob=(5)
+cfi=(8)
+cfn=(256) fflush
+calls=1 0 
+0 405
+
+fn=(46) std::__detail::_Prime_rehash_policy::_M_next_bkt(unsigned long) const
+0 304
+cfn=(48)
+calls=4 0 
+0 12
+0 100
+cfn=(48)
+calls=1 0 
+0 16841
+0 10
+
+fn=(220)
+0 6
+cob=(5)
+cfi=(8)
+cfn=(222) fwrite
+calls=1 0 
+0 555
+
+fn=(236)
+0 7
+cob=(5)
+cfi=(8)
+cfn=(238) putc
+calls=1 0 
+0 532
+
+fn=(186) std::string::_Rep::_M_destroy(std::allocator<char> const&)
+0 3026
+cfn=(86)
+calls=1513 0 
+0 773318
+
+fn=(82) std::__detail::_Prime_rehash_policy::_M_need_rehash(unsigned long, unsigned long, unsigned long) const
+0 415
+cfn=(48)
+calls=4 0 
+0 17741
+0 40
+cfn=(46)
+calls=4 0 
+0 399
+0 327
+
+fn=(112) char* std::string::_S_construct<char const*>(char const*, char const*, std::allocator<char> const&, std::forward_iterator_tag)
+0 10085
+
+fn=(108) std::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string(char const*, std::allocator<char> const&)
+0 22187
+cfn=(48)
+calls=2017 0 
+0 38323
+0 12102
+cfn=(112)
+calls=2017 0 
+0 10085
+0 14119
+
+fn=(156) std::_Rb_tree_insert_and_rebalance(bool, std::_Rb_tree_node_base*, std::_Rb_tree_node_base*, std::_Rb_tree_node_base&)
+0 82042
+cfn=(170)
+calls=297 0 
+0 4888
+0 8134
+cfn=(168)
+calls=491 0 
+0 7850
+0 1264
+cfn=(168)
+calls=94 0 
+0 1624
+0 2337
+cfn=(170)
+calls=257 0 
+0 4408
+0 514
+
+fn=(170)
+0 10071
+
+ob=(5)
+fl=(8)
+fn=(110)
+0 36306
+
+fn=(246) _swrite
+0 15
+cfn=(248) __swrite
+calls=1 0 
+0 12
+0 15
+
+fn=(148) atexit_register
+0 9
+cfn=(150) __vsnprintf_chk
+calls=1 0 
+0 137
+0 20
+cfn=(150)
+calls=1 0 
+0 164
+0 7
+
+fn=(238)
+0 10
+cfn=(150)
+calls=1 0 
+0 162
+0 13
+cfn=(150)
+calls=1 0 
+0 149
+0 3
+cfn=(150)
+calls=1 0 
+0 188
+0 7
+
+fn=(150)
+0 1
+cob=(3)
+cfi=(9)
+cfn=(122)
+calls=1 0 
+0 136
+0 1
+cob=(3)
+cfi=(9)
+cfn=(134)
+calls=1 0 
+0 163
+0 3
+cfn=(224) flockfile
+calls=3 0 
+0 483
+0 3
+cfn=(232) funlockfile
+calls=3 0 
+0 561
+0 1
+cfn=(244) __sflush
+calls=1 0 
+0 32
+0 1
+cfn=(228) __sfvwrite
+calls=1 0 
+0 149
+0 1
+cfn=(240) __swbuf
+calls=1 0 
+0 148
+
+fn=(151) __vsnprintf_chk'2
+0 1
+cob=(9)
+cfi=(7)
+cfn=(230) _platform_memchr
+calls=1 0 
+0 34
+0 1
+cob=(9)
+cfi=(7)
+cfn=(192)
+calls=1 0 
+0 19
+0 3
+cob=(3)
+cfi=(9)
+cfn=(122)
+calls=3 0 
+0 408
+0 6
+cob=(3)
+cfi=(9)
+cfn=(226) pthread_self
+calls=6 0 
+0 12
+0 1
+cfn=(242) __fflush
+calls=1 0 
+0 95
+0 1
+cfn=(246)
+calls=1 0 
+0 42
+
+fn=(244)
+0 59
+cfn=(151)
+calls=1 0 
+0 43
+0 16
+
+fn=(256)
+0 9
+cfn=(150)
+calls=1 0 
+0 162
+0 5
+cfn=(150)
+calls=1 0 
+0 33
+0 3
+cfn=(150)
+calls=1 0 
+0 188
+0 5
+
+fn=(224)
+0 18
+cfn=(151)
+calls=3 0 
+0 9
+0 18
+cfn=(151)
+calls=3 0 
+0 411
+0 27
+
+fn=(228)
+0 42
+cfn=(151)
+calls=1 0 
+0 35
+0 23
+cfn=(151)
+calls=1 0 
+0 20
+0 29
+
+fn=(232)
+0 18
+cfn=(151)
+calls=3 0 
+0 9
+0 45
+cob=(3)
+cfi=(9)
+cfn=(134)
+calls=3 0 
+0 489
+
+fn=(222)
+0 22
+cfn=(150)
+calls=1 0 
+0 162
+0 15
+cfn=(150)
+calls=1 0 
+0 150
+0 9
+cfn=(150)
+calls=1 0 
+0 188
+0 9
+
+fn=(248)
+0 7
+cob=(14) /usr/lib/system/libsystem_kernel.dylib
+cfi=(10) ???
+cfn=(250) write$NOCANCEL
+calls=1 0 
+0 5
+
+fn=(240)
+0 41
+cfn=(151)
+calls=1 0 
+0 96
+0 11
+
+fn=(146) __cxa_atexit
+0 9
+cfn=(148)
+calls=1 0 
+0 337
+0 3
+
+fn=(242)
+0 9
+cfn=(244)
+calls=1 0 
+0 86
+
+ob=(4) /usr/lib/dyld
+fl=(3) ???
+fn=(34) ImageLoaderMachOCompressed::trieWalk(unsigned char const*, unsigned char const*, char const*)
+0 43929
+
+fn=(50) ImageLoaderMachOCompressed::libReExported(unsigned int) const
+0 5400
+
+fn=(26) ImageLoaderMachOCompressed::libImage(unsigned int) const
+0 729
+
+fn=(40) ImageLoaderMachOCompressed::exportedSymbolAddress(ImageLoader::LinkContext const&, ImageLoader::Symbol const*, ImageLoader const*, bool) const
+0 929
+cob=(9)
+cfi=(7)
+cfn=(190) _platform_memmove
+calls=1 0 
+0 8
+cob=(23)
+cfi=(5)
+cfn=(84) floor$fenv_access_off
+calls=1 0 
+0 8
+cob=(9)
+cfi=(7)
+cfn=(74) _platform_memset
+calls=1 0 
+0 8
+cob=(23)
+cfi=(5)
+cfn=(52) ceil$fenv_access_off
+calls=1 0 
+0 8
+0 318
+
+fn=(14) dyld::fastBindLazySymbol(ImageLoader**, unsigned long)
+0 198
+cfn=(16) ImageLoaderMachOCompressed::doBindFastLazySymbol(unsigned int, ImageLoader::LinkContext const&, void (*)(), void (*)())
+calls=9 0 
+0 70246
+0 36
+
+fn=(42) ImageLoaderMachO::bindLocation(ImageLoader::LinkContext const&, unsigned long, unsigned long, ImageLoader const*, unsigned char, char const*, long, char const*)
+0 342
+
+fn=(16)
+0 135
+cfn=(18) ImageLoaderMachO::usesTwoLevelNameSpace() const
+calls=9 0 
+0 63
+0 432
+cfn=(24) ImageLoaderMachOCompressed::resolve(ImageLoader::LinkContext const&, char const*, unsigned char, int, ImageLoader const**, ImageLoaderMachOCompressed::LastLookup*, bool)
+calls=9 0 
+0 66913
+0 117
+cfn=(42)
+calls=9 0 
+0 342
+0 108
+cfn=(20) ImageLoaderMachO::segActualLoadAddress(unsigned int) const
+calls=9 0 
+0 198
+0 1767
+cfn=(18)
+calls=9 0 
+0 63
+0 108
+
+fn=(36) ImageLoaderMachO::getExportedSymbolAddress(ImageLoader::Symbol const*, ImageLoader::LinkContext const&, ImageLoader const*, bool) const
+0 72
+cfn=(38) ImageLoaderMachO::getSymbolAddress(ImageLoader::Symbol const*, ImageLoader const*, ImageLoader::LinkContext const&, bool) const
+calls=9 0 
+0 1585
+
+fn=(18)
+0 126
+
+fn=(20)
+0 72
+cfn=(22) ImageLoaderMachOCompressed::segmentCommandOffsets() const
+calls=9 0 
+0 45
+0 81
+
+fn=(22)
+0 45
+
+fn=(24)
+0 333
+cfn=(26)
+calls=9 0 
+0 81
+0 117
+cfn=(28) ImageLoaderMachOCompressed::resolveTwolevel(ImageLoader::LinkContext const&, ImageLoader const*, bool, char const*, bool, ImageLoader const**)
+calls=9 0 
+0 66274
+0 108
+
+fn=(28)
+0 189
+cfn=(30) ImageLoaderMachO::findExportedSymbol(char const*, bool, ImageLoader const**) const
+calls=9 0 
+0 64275
+0 153
+cfn=(36)
+calls=9 0 
+0 1657
+
+fn=(30)
+0 135
+cfn=(32) ImageLoaderMachOCompressed::findExportedSymbol(char const*, ImageLoader const**) const
+calls=9 0 
+0 11610
+0 54
+cfn=(50)
+calls=4 0 
+0 36
+0 264
+cfn=(50)
+calls=66 0 
+0 594
+0 420
+cfn=(26)
+calls=70 0 
+0 630
+0 560
+cfn=(31) ImageLoaderMachO::findExportedSymbol(char const*, bool, ImageLoader const**) const'2
+calls=70 0 
+0 49364
+0 608
+
+fn=(31)
+0 1080
+cfn=(33) ImageLoaderMachOCompressed::findExportedSymbol(char const*, ImageLoader const**) const'2
+calls=2 0 
+0 1582
+cfn=(32)
+calls=70 0 
+0 35694
+0 728
+cfn=(50)
+calls=64 0 
+0 576
+0 1864
+cfn=(50)
+calls=466 0 
+0 4194
+0 5278
+
+fn=(38)
+0 162
+cfn=(40)
+calls=9 0 
+0 1279
+0 144
+
+fn=(32)
+0 2054
+cfn=(34)
+calls=79 0 
+0 42465
+0 393
+cfn=(26)
+calls=2 0 
+0 18
+0 28
+cfn=(31)
+calls=2 0 
+0 1632
+0 714
+
+fn=(33)
+0 52
+cfn=(34)
+calls=2 0 
+0 1464
+
+ob=(14)
+fl=(10)
+fn=(210) _kernelrpc_mach_vm_map_trap
+0 4
+
+fn=(208) mach_vm_map
+0 31
+cfn=(210)
+calls=1 0 
+0 4
+0 19
+
+fn=(250)
+0 4
+
+ob=(4)
+fl=(3)
+fn=(33)
+0 46
+
+ob=(14)
+fl=(10)
+fn=(250)
+0 1
+
+ob=(4)
+fl=(3)
+fn=(33)
+0 20
+
+ob=(9)
+fl=(7)
+fn=(68) spin_lock
+0 137520
+
+fn=(192)
+0 33457
+
+fn=(76) _platform_memset$VARIANT$Unknown
+0 479
+
+fn=(132) OSAtomicCompareAndSwap64$VARIANT$mp
+0 65
+
+fn=(162) _platform_memcmp
+0 6948817
+
+fn=(72) spin_unlock
+0 82512
+
+fn=(230)
+0 34
+
+fn=(202) OSMemoryBarrier
+0 4
+
+fn=(74)
+0 8
+
+fn=(190)
+0 8
+
+ob=(23)
+fl=(5)
+fn=(84)
+0 8
+
+fn=(54)
+0 18
+
+fn=(52)
+0 8
+
+ob=(8) ./a.out
+fl=(1) ???
+fn=(200) extendBackward(std::vector<letter, std::allocator<letter> >&, position, char (*) [15], std::multiset<char, std::less<char>, std::allocator<char> >&, int, std::set<char, std::less<char>, std::allocator<char> > (*) [15], bool, int, int, std::vector<std::vector<letter, std::allocator<letter> >, std::allocator<std::vector<letter, std::allocator<letter> > > >&)
+0 812
+cfn=(106) wordAccumulate(std::vector<letter, std::allocator<letter> >&)
+calls=28 0 
+0 2240
+0 140
+cfn=(6) _GLOBAL__sub_I_extended_type_info_typeid.cpp
+calls=28 0 
+0 448
+0 140
+cfn=(116) visited(std::string, position, int, int)
+calls=28 0 
+0 45174
+0 7448
+cfn=(6)
+calls=476 0 
+0 5236
+0 3696
+cfn=(6)
+calls=28 0 
+0 308
+0 7000
+cfn=(6)
+calls=476 0 
+0 5236
+0 3668
+cfn=(6)
+calls=28 0 
+0 308
+0 1023
+cfn=(104) extendForward(std::vector<letter, std::allocator<letter> >&, position, char (*) [15], std::multiset<char, std::less<char>, std::allocator<char> >&, std::set<char, std::less<char>, std::allocator<char> > (*) [15], bool, int, int, std::vector<std::vector<letter, std::allocator<letter> >, std::allocator<std::vector<letter, std::allocator<letter> > > >&)
+calls=28 0 
+0 3770911
+0 41391
+cfn=(6)
+calls=2793 0 
+0 30723
+0 21168
+cfn=(6)
+calls=147 0 
+0 1617
+0 41013
+cfn=(6)
+calls=2793 0 
+0 30723
+0 21168
+cfn=(6)
+calls=147 0 
+0 1617
+0 41748
+cfn=(6)
+calls=2793 0 
+0 30723
+0 21168
+cfn=(6)
+calls=147 0 
+0 1617
+0 10584
+cfn=(6)
+calls=49 0 
+0 99407
+0 3073
+cfn=(6)
+calls=49 0 
+0 3157
+0 98
+cfn=(6)
+calls=49 0 
+0 11417
+0 1904
+cfn=(201) extendBackward(std::vector<letter, std::allocator<letter> >&, position, char (*) [15], std::multiset<char, std::less<char>, std::allocator<char> >&, int, std::set<char, std::less<char>, std::allocator<char> > (*) [15], bool, int, int, std::vector<std::vector<letter, std::allocator<letter> >, std::allocator<std::vector<letter, std::allocator<letter> > > >&)'2
+calls=47 0 
+0 11371008
+0 36
+cfn=(201)
+calls=2 0 
+0 125910
+0 343
+cfn=(6)
+calls=49 0 
+0 154903
+0 588
+cfn=(6)
+calls=147 0 
+0 1722
+0 755
+cfn=(6)
+calls=2 0 
+0 588
+0 269
+
+fn=(201)
+0 10904
+cfn=(106)
+calls=376 0 
+0 598274
+0 1880
+cfn=(6)
+calls=376 0 
+0 6768
+0 1880
+cfn=(116)
+calls=376 0 
+0 689356
+0 79600
+cfn=(6)
+calls=6389 0 
+0 137109
+0 31806
+cfn=(6)
+calls=330 0 
+0 8712
+0 36009
+cfn=(6)
+calls=3072 0 
+0 63592
+0 17199
+cfn=(6)
+calls=155 0 
+0 4085
+0 5621
+cfn=(104)
+calls=155 0 
+0 6198505
+0 219901
+cfn=(6)
+calls=18558 0 
+0 409386
+0 96090
+cfn=(6)
+calls=904 0 
+0 24724
+0 175878
+cfn=(6)
+calls=15120 0 
+0 331342
+0 81822
+cfn=(6)
+calls=730 0 
+0 20238
+0 178832
+cfn=(6)
+calls=15120 0 
+0 331342
+0 81822
+cfn=(6)
+calls=730 0 
+0 20238
+0 47384
+cfn=(6)
+calls=327 0 
+0 526368
+0 19165
+cfn=(6)
+calls=327 0 
+0 21786
+0 654
+cfn=(6)
+calls=327 0 
+0 107775
+0 13052
+cfn=(201)
+calls=326 0 
+0 11683075
+0 18
+cfn=(201)
+calls=1 0 
+0 16322
+0 2289
+cfn=(6)
+calls=327 0 
+0 715802
+0 2920
+cfn=(6)
+calls=730 0 
+0 8133
+0 348
+cfn=(6)
+calls=174 0 
+0 1984
+0 6268
+cfn=(6)
+calls=293 0 
+0 155755
+0 296
+cfn=(6)
+calls=1 0 
+0 835
+0 3171
+
+fn=(102) generateHorizontalWords(char (*) [15], std::multiset<char, std::less<char>, std::allocator<char> >&, position, std::set<char, std::less<char>, std::allocator<char> > (*) [15], std::vector<std::vector<letter, std::allocator<letter> >, std::allocator<std::vector<letter, std::allocator<letter> > > >&)
+0 10058
+cfn=(200)
+calls=15 0 
+0 3432484
+0 5936
+cfn=(104)
+calls=90 0 
+0 6688569
+0 449
+cfn=(6)
+calls=29 0 
+0 15656
+0 951
+
+fn=(158) std::_Rb_tree<int, std::pair<int const, bool>, std::_Select1st<std::pair<int const, bool> >, std::less<int>, std::allocator<std::pair<int const, bool> > >::_M_get_insert_hint_unique_pos(std::_Rb_tree_const_iterator<std::pair<int const, bool> >, int const&)
+0 31346
+cfn=(7) _GLOBAL__sub_I_extended_type_info_typeid.cpp'2
+calls=997 0 
+0 17052
+0 24518
+
+fn=(188) generateVerticalWords(char (*) [15], std::multiset<char, std::less<char>, std::allocator<char> >&, position, std::set<char, std::less<char>, std::allocator<char> > (*) [15], std::vector<std::vector<letter, std::allocator<letter> >, std::allocator<std::vector<letter, std::allocator<letter> > > >&)
+0 10787
+cfn=(200)
+calls=1 0 
+0 32812
+0 168
+cfn=(200)
+calls=12 0 
+0 12458930
+0 6529
+cfn=(104)
+calls=92 0 
+0 3271591
+0 448
+cfn=(6)
+calls=28 0 
+0 12916
+0 953
+
+fn=(182) std::_Rb_tree<char, char, std::_Identity<char>, std::less<char>, std::allocator<char> >::_M_erase(std::_Rb_tree_node<char>*)
+0 47556
+cfn=(7)
+calls=468 0 
+0 246411
+0 10704
+cfn=(7)
+calls=2442 0 
+0 1294229
+0 21267
+cfn=(7)
+calls=3969 0 
+0 2132481
+0 27418
+
+fn=(154) std::_Rb_tree<std::string, std::pair<std::string const, std::map<int, bool, std::less<int>, std::allocator<std::pair<int const, bool> > > >, std::_Select1st<std::pair<std::string const, std::map<int, bool, std::less<int>, std::allocator<std::pair<int const, bool> > > > >, std::less<std::string>, std::allocator<std::pair<std::string const, std::map<int, bool, std::less<int>, std::allocator<std::pair<int const, bool> > > > > >::_M_get_insert_unique_pos(std::string const&)
+0 28
+
+fn=(172) void std::vector<letter, std::allocator<letter> >::_M_emplace_back_aux<letter>(letter&&)
+0 4691
+cfn=(7)
+calls=68 0 
+0 26849
+0 1478
+cfn=(7)
+calls=57 0 
+0 12693
+0 204
+cfn=(7)
+calls=68 0 
+0 20704
+0 1272
+cfn=(7)
+calls=68 0 
+0 13141
+0 136
+
+fn=(198) void std::vector<std::vector<letter, std::allocator<letter> >, std::allocator<std::vector<letter, std::allocator<letter> > > >::_M_emplace_back_aux<std::vector<letter, std::allocator<letter> > const&>(std::vector<letter, std::allocator<letter> > const&)
+0 227
+cfn=(7)
+calls=10 0 
+0 3162
+0 350
+cfn=(7)
+calls=10 0 
+0 235
+0 13520
+cfn=(7)
+calls=9 0 
+0 2971
+0 221
+cfn=(7)
+calls=10 0 
+0 2070
+0 67
+
+fn=(2) generateValidWords(char (*) [15], std::multiset<char, std::less<char>, std::allocator<char> >&, std::set<char, std::less<char>, std::allocator<char> > (*) [15], std::set<char, std::less<char>, std::allocator<char> > (*) [15])
+0 16
+cfn=(4) generateAnchorPositions(char (*) [15])
+calls=1 0 
+0 122347
+0 19
+cfn=(102)
+calls=1 0 
+0 125139
+0 832
+cfn=(102)
+calls=104 0 
+0 10028964
+0 1365
+cfn=(188)
+calls=105 0 
+0 15795134
+0 952
+cfn=(6)
+calls=1 0 
+0 508
+0 208
+cfn=(6)
+calls=104 0 
+0 66781
+0 320
+cfn=(6)
+calls=1 0 
+0 145
+0 10
+cfn=(6)
+calls=1 0 
+0 402
+0 9
+
+fn=(4)
+0 17
+cfn=(6)
+calls=1 0 
+0 20140
+0 9
+cfn=(6)
+calls=1 0 
+0 267
+0 5
+cfn=(6)
+calls=1 0 
+0 11667
+0 23192
+cfn=(6)
+calls=105 0 
+0 31173
+0 840
+cfn=(6)
+calls=105 0 
+0 33562
+0 1475
+
+fn=(6)
+0 105
+cfn=(80) std::_Hashtable<position, position, std::allocator<position>, std::__detail::_Identity, positionCompare, positionHash, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, true, true> >::_M_insert_unique_node(unsigned long, unsigned long, std::__detail::_Hash_node<position, true>*)
+calls=105 0 
+0 33457
+0 125
+cfn=(172)
+calls=125 0 
+0 81168
+0 10
+cfn=(198)
+calls=10 0 
+0 22823
+0 267
+cfn=(152) std::_Rb_tree<std::string, std::pair<std::string const, std::map<int, bool, std::less<int>, std::allocator<std::pair<int const, bool> > > >, std::_Select1st<std::pair<std::string const, std::map<int, bool, std::less<int>, std::allocator<std::pair<int const, bool> > > > >, std::less<std::string>, std::allocator<std::pair<std::string const, std::map<int, bool, std::less<int>, std::allocator<std::pair<int const, bool> > > > > >::_M_get_insert_hint_unique_pos(std::_Rb_tree_const_iterator<std::pair<std::string const, std::map<int, bool, std::less<int>, std::allocator<std::pair<int const, bool> > > > >, std::string const&)
+calls=267 0 
+0 36777
+0 1514
+cfn=(164) std::_Rb_tree<char, char, std::_Identity<char>, std::less<char>, std::allocator<char> >::_M_copy(std::_Rb_tree_node<char> const*, std::_Rb_tree_node<char>*)
+calls=1514 0 
+0 2790801
+0 1514
+cfn=(182)
+calls=1514 0 
+0 3780066
+0 1590
+cfn=(158)
+calls=1590 0 
+0 72916
+0 1516
+cob=(1)
+cfi=(4)
+cfn=(186)
+calls=1513 0 
+0 776344
+0 4161
+cob=(1)
+cfi=(4)
+cfn=(174)
+calls=4161 0 
+0 2349243
+0 2017
+cob=(1)
+cfi=(4)
+cfn=(108)
+calls=2017 0 
+0 96816
+0 2286
+cob=(1)
+cfi=(4)
+cfn=(114)
+calls=2286 0 
+0 38384
+0 3
+cob=(1)
+cfi=(4)
+cfn=(194)
+calls=2 0 
+0 30
+0 5584
+cob=(1)
+cfi=(4)
+cfn=(180)
+calls=5584 0 
+0 57251
+0 1514
+cob=(1)
+cfi=(4)
+cfn=(166)
+calls=1514 0 
+0 98644
+0 1859
+cob=(1)
+cfi=(4)
+cfn=(156)
+calls=1859 0 
+0 113061
+0 1677
+cob=(1)
+cfi=(4)
+cfn=(86)
+calls=1677 0 
+0 527789
+0 2266
+cob=(1)
+cfi=(4)
+cfn=(56)
+calls=2266 0 
+0 632462
+0 1
+cob=(1)
+cfi=(4)
+cfn=(118)
+calls=1 0 
+0 415
+0 1
+cob=(1)
+cfi=(4)
+cfn=(138)
+calls=1 0 
+0 532
+0 1
+cob=(5)
+cfi=(8)
+cfn=(146)
+calls=1 0 
+0 349
+0 357030
+cob=(9)
+cfi=(7)
+cfn=(162)
+calls=357030 0 
+0 6935439
+0 301
+cob=(9)
+cfi=(7)
+cfn=(192)
+calls=301 0 
+0 7010
+0 2
+cob=(9)
+cfi=(7)
+cfn=(76)
+calls=1 0 
+0 144
+0 15
+cob=(16)
+cfi=(2)
+cfn=(8)
+calls=5 0 
+0 39944
+0 10
+
+fn=(7)
+0 1
+cfn=(154)
+calls=1 0 
+0 28
+0 105
+cob=(1)
+cfi=(4)
+cfn=(82)
+calls=104 0 
+0 18916
+0 1252
+cob=(1)
+cfi=(4)
+cfn=(194)
+calls=1252 0 
+0 20589
+0 6960
+cob=(1)
+cfi=(4)
+cfn=(86)
+calls=6960 0 
+0 3697614
+0 8542
+cob=(1)
+cfi=(4)
+cfn=(56)
+calls=8542 0 
+0 2582051
+0 521
+cob=(9)
+cfi=(7)
+cfn=(162)
+calls=521 0 
+0 13378
+0 78
+cob=(9)
+cfi=(7)
+cfn=(192)
+calls=77 0 
+0 1643
+0 4
+cob=(9)
+cfi=(7)
+cfn=(76)
+calls=4 0 
+0 306
+0 6
+cob=(16)
+cfi=(2)
+cfn=(8)
+calls=2 0 
+0 15130
+0 4
+
+fn=(80)
+0 1785
+cfn=(7)
+calls=105 0 
+0 22506
+0 246
+cfn=(7)
+calls=4 0 
+0 1135
+0 20
+cfn=(7)
+calls=4 0 
+0 310
+0 3024
+cfn=(7)
+calls=4 0 
+0 1633
+0 2798
+
+fn=(152)
+0 6786
+cfn=(7)
+calls=255 0 
+0 5498
+0 2550
+cfn=(7)
+calls=255 0 
+0 4789
+0 2040
+cfn=(7)
+calls=255 0 
+0 8189
+0 6495
+cfn=(7)
+calls=11 0 
+0 212
+0 71
+cfn=(7)
+calls=1 0 
+0 29
+0 118
+
+fn=(106)
+0 28238
+cfn=(6)
+calls=2017 0 
+0 98833
+0 107581
+cfn=(6)
+calls=4161 0 
+0 2353404
+0 67263
+
+fn=(116)
+0 244792
+cfn=(6)
+calls=16319 0 
+0 325758
+0 112463
+cfn=(6)
+calls=2005 0 
+0 49675
+0 170808
+cfn=(6)
+calls=14208 0 
+0 278969
+0 99526
+cfn=(6)
+calls=1750 0 
+0 44177
+0 186048
+cfn=(6)
+calls=14208 0 
+0 278969
+0 101276
+cfn=(6)
+calls=1750 0 
+0 44177
+0 160421
+cfn=(6)
+calls=12925 0 
+0 267374
+0 86100
+cfn=(6)
+calls=1578 0 
+0 40372
+0 60169
+cfn=(6)
+calls=1590 0 
+0 437341
+0 11130
+cfn=(6)
+calls=1590 0 
+0 74506
+0 12793
+cfn=(6)
+calls=541 0 
+0 39824
+0 3147
+cfn=(6)
+calls=1049 0 
+0 55703
+0 131680
+cfn=(6)
+calls=3394 0 
+0 58384
+0 24392
+cfn=(6)
+calls=427 0 
+0 9303
+0 21718
+cfn=(6)
+calls=1 0 
+0 416
+0 11
+cfn=(6)
+calls=1 0 
+0 533
+0 4
+cfn=(6)
+calls=1 0 
+0 350
+0 2143
+cfn=(6)
+calls=1 0 
+0 274
+0 798
+cfn=(6)
+calls=266 0 
+0 93696
+0 1335
+cfn=(6)
+calls=267 0 
+0 4804
+0 2937
+cfn=(6)
+calls=267 0 
+0 37044
+0 3524
+cfn=(6)
+calls=192 0 
+0 6291
+0 1602
+cfn=(6)
+calls=87 0 
+0 6547
+0 630
+cfn=(6)
+calls=105 0 
+0 8029
+0 300
+cfn=(6)
+calls=75 0 
+0 4750
+0 10720
+
+fn=(160) std::_Rb_tree<std::string, std::string, std::_Identity<std::string>, std::less<std::string>, std::allocator<std::string> >::find(std::string const&) [clone .constprop.851]
+0 269646
+cfn=(6)
+calls=22617 0 
+0 473494
+0 122394
+cfn=(6)
+calls=1232 0 
+0 34342
+0 25872
+
+fn=(214) std::_Rb_tree_iterator<std::pair<std::string const, std::set<char, std::less<char>, std::allocator<char> > > > std::_Rb_tree<std::string, std::pair<std::string const, std::set<char, std::less<char>, std::allocator<char> > >, std::_Select1st<std::pair<std::string const, std::set<char, std::less<char>, std::allocator<char> > > >, std::less<std::string>, std::allocator<std::pair<std::string const, std::set<char, std::less<char>, std::allocator<char> > > > >::_M_emplace_hint_unique<std::piecewise_construct_t const&, std::tuple<std::string const&>, std::tuple<> >(std::_Rb_tree_const_iterator<std::pair<std::string const, std::set<char, std::less<char>, std::allocator<char> > > >, std::piecewise_construct_t const&, std::tuple<std::string const&>&&, std::tuple<>&&) [clone .isra.337]
+0 24
+cfn=(6)
+calls=2 0 
+0 862
+0 12
+cfn=(6)
+calls=2 0 
+0 36
+0 48
+cfn=(6)
+calls=2 0 
+0 72
+0 18
+cfn=(6)
+calls=2 0 
+0 32
+0 16
+cfn=(6)
+calls=2 0 
+0 124
+0 37
+cfn=(6)
+calls=1 0 
+0 88
+0 17
+cfn=(6)
+calls=1 0 
+0 32
+0 4
+cfn=(6)
+calls=1 0 
+0 35
+0 30
+
+fn=(0) main
+0 10
+cfn=(2)
+calls=1 0 
+0 26143151
+
+fn=(104)
+0 9125
+cfn=(106)
+calls=365 0 
+0 180258
+0 2555
+cfn=(6)
+calls=365 0 
+0 6150
+0 1825
+cfn=(116)
+calls=365 0 
+0 603156
+0 7726
+cfn=(160)
+calls=213 0 
+0 150667
+0 12370
+cfn=(6)
+calls=442 0 
+0 4862
+0 4024
+cfn=(6)
+calls=155 0 
+0 81870
+0 230906
+cfn=(6)
+calls=18621 0 
+0 339159
+0 111350
+cfn=(6)
+calls=969 0 
+0 21201
+0 232052
+cfn=(6)
+calls=18621 0 
+0 339159
+0 111350
+cfn=(6)
+calls=969 0 
+0 21201
+0 63662
+cfn=(6)
+calls=412 0 
+0 813119
+0 23857
+cfn=(6)
+calls=412 0 
+0 26782
+0 824
+cfn=(6)
+calls=412 0 
+0 112731
+0 13974
+cfn=(105) extendForward(std::vector<letter, std::allocator<letter> >&, position, char (*) [15], std::multiset<char, std::less<char>, std::allocator<char> >&, std::set<char, std::less<char>, std::allocator<char> > (*) [15], bool, int, int, std::vector<std::vector<letter, std::allocator<letter> >, std::allocator<std::vector<letter, std::allocator<letter> > > >&)'2
+calls=379 0 
+0 12273268
+0 528
+cfn=(105)
+calls=33 0 
+0 2031575
+0 2060
+cfn=(6)
+calls=412 0 
+0 1146349
+0 1938
+cfn=(6)
+calls=969 0 
+0 10979
+0 3196
+cfn=(6)
+calls=34 0 
+0 823
+0 238
+cfn=(6)
+calls=34 0 
+0 7488
+0 167
+cfn=(6)
+calls=33 0 
+0 11671
+0 527
+cfn=(6)
+calls=26 0 
+0 286
+0 6682
+cfn=(6)
+calls=442 0 
+0 4862
+0 3562
+cfn=(6)
+calls=26 0 
+0 286
+0 2098
+cfn=(105)
+calls=26 0 
+0 876305
+0 399
+cfn=(6)
+calls=3 0 
+0 11604
+0 81
+cfn=(6)
+calls=26 0 
+0 6663
+0 26
+
+fn=(105)
+0 31200
+cfn=(106)
+calls=1248 0 
+0 1874547
+0 8736
+cfn=(6)
+calls=1248 0 
+0 22464
+0 6240
+cfn=(116)
+calls=1248 0 
+0 2280047
+0 26998
+cfn=(160)
+calls=1019 0 
+0 775081
+0 65469
+cfn=(6)
+calls=2669 0 
+0 64310
+0 18685
+cfn=(6)
+calls=1065 0 
+0 540232
+0 831010
+cfn=(6)
+calls=70312 0 
+0 1434219
+0 389533
+cfn=(6)
+calls=3564 0 
+0 91953
+0 830664
+cfn=(6)
+calls=70313 0 
+0 1434314
+0 389540
+cfn=(6)
+calls=3564 0 
+0 92005
+0 183504
+cfn=(6)
+calls=726 0 
+0 1353421
+0 40992
+cfn=(6)
+calls=726 0 
+0 48433
+0 1452
+cfn=(6)
+calls=726 0 
+0 201280
+0 25252
+cfn=(105)
+calls=692 0 
+0 11313132
+0 544
+cfn=(105)
+calls=34 0 
+0 1098228
+0 3630
+cfn=(6)
+calls=726 0 
+0 1764526
+0 7128
+cfn=(6)
+calls=3564 0 
+0 40017
+0 12233
+cfn=(6)
+calls=267 0 
+0 6488
+0 1869
+cfn=(6)
+calls=267 0 
+0 63627
+0 537
+cfn=(6)
+calls=1 0 
+0 3529
+0 12
+cfn=(6)
+calls=1 0 
+0 2414
+0 2
+cfn=(6)
+calls=1 0 
+0 2224
+0 7
+cfn=(214)
+calls=1 0 
+0 840
+0 111
+cfn=(6)
+calls=34 0 
+0 39060
+0 2656
+cfn=(6)
+calls=138 0 
+0 4924
+0 1379
+cfn=(214)
+calls=1 0 
+0 647
+0 33570
+cfn=(6)
+calls=2670 0 
+0 64349
+0 14054
+cfn=(6)
+calls=138 0 
+0 4934
+0 7954
+cfn=(105)
+calls=55 0 
+0 1578266
+0 551
+cfn=(105)
+calls=29 0 
+0 1035584
+0 804
+
+ob=(3)
+fl=(9)
+fn=(130) thread_start
+0 13
+cob=(9)
+cfi=(7)
+cfn=(132)
+calls=13 0 
+0 65
+
+fn=(128) pthread_threadid_np
+0 200
+
+fn=(142) _pthread_cond_signal
+0 14
+cfn=(144) _pthread_cond_check_init
+calls=1 0 
+0 19
+0 38
+cfn=(130)
+calls=1 0 
+0 6
+0 13
+
+fn=(120)
+0 78
+
+fn=(136) __mtx_droplock
+0 130
+cfn=(128)
+calls=2 0 
+0 50
+0 368
+cfn=(130)
+calls=6 0 
+0 36
+0 132
+
+ob=(8)
+fl=(1)
+fn=(105)
+0 1119
+cfn=(6)
+calls=7 0 
+0 11229
+0 94
+cfn=(6)
+calls=29 0 
+0 22476
+0 29
+
+fn=(164)
+0 15140
+cfn=(7)
+calls=1514 0 
+0 316592
+0 21193
+cfn=(165) std::_Rb_tree<char, char, std::_Identity<char>, std::less<char>, std::allocator<char> >::_M_copy(std::_Rb_tree_node<char> const*, std::_Rb_tree_node<char>*)'2
+calls=1513 0 
+0 797477
+0 13617
+cfn=(7)
+calls=1512 0 
+0 496585
+0 2648
+cfn=(7)
+calls=1324 0 
+0 460531
+0 37743
+cfn=(165)
+calls=1237 0 
+0 606096
+0 23179
+
+fn=(165)
+0 35370
+cfn=(7)
+calls=3537 0 
+0 1111991
+0 41268
+cfn=(165)
+calls=787 0 
+0 267110
+0 16959
+cfn=(7)
+calls=506 0 
+0 165130
+0 32855
+
+ob=(3)
+fl=(9)
+fn=(136)
+0 60
+
+fn=(144)
+0 19
+
+fn=(126) _pthread_mutex_check_init
+0 216
+
+fn=(122)
+0 12
+cfn=(124) _pthread_mutex_lock
+calls=6 0 
+0 816
+
+fn=(134)
+0 48
+cfn=(126)
+calls=6 0 
+0 108
+0 60
+cfn=(136)
+calls=6 0 
+0 776
+0 84
+
+fn=(226)
+0 12
+
+fn=(124)
+0 66
+cfn=(126)
+calls=6 0 
+0 108
+0 36
+cfn=(128)
+calls=6 0 
+0 150
+0 204
+cfn=(130)
+calls=6 0 
+0 36
+0 216
+
+fn=(140)
+0 3
+cfn=(142)
+calls=1 0 
+0 90
+
+ob=(16)
+fl=(2)
+fn=(8)
+0 200
+cfn=(12) _dyld_fast_stub_entry(void*, long)
+calls=8 0 
+0 53831
+0 192
+cob=(1)
+cfi=(4)
+cfn=(252)
+calls=1 0 
+0 422
+cob=(1)
+cfi=(4)
+cfn=(234)
+calls=1 0 
+0 597
+cob=(1)
+cfi=(4)
+cfn=(216)
+calls=1 0 
+0 634
+cob=(9)
+cfi=(7)
+cfn=(192)
+calls=1 0 
+0 19
+cob=(23)
+cfi=(5)
+cfn=(54)
+calls=1 0 
+0 2
+cob=(1)
+cfi=(4)
+cfn=(82)
+calls=1 0 
+0 6
+cob=(9)
+cfi=(7)
+cfn=(76)
+calls=1 0 
+0 29
+cob=(1)
+cfi=(4)
+cfn=(46)
+calls=1 0 
+0 16868
+
+fn=(9)
+0 25
+cfn=(12)
+calls=1 0 
+0 16784
+0 24
+cob=(23)
+cfi=(5)
+cfn=(54)
+calls=1 0 
+0 2
+
+fn=(12)
+0 135
+cob=(4)
+cfi=(3)
+cfn=(14)
+calls=9 0 
+0 70480
+
+ob=(11)
+fl=(6)
+fn=(94) get_tiny_previous_free_msize
+0 231357
+
+fn=(88)
+0 225576
+cfn=(90) szone_size
+calls=12532 0 
+0 1225853
+0 338364
+cfn=(92) szone_free_definite_size
+calls=12532 0 
+0 4093880
+
+fn=(66) append_int
+0 1
+cob=(14)
+cfi=(10)
+cfn=(208)
+calls=1 0 
+0 54
+0 2
+cob=(9)
+cfi=(7)
+cfn=(202)
+calls=2 0 
+0 4
+0 27504
+cob=(9)
+cfi=(7)
+cfn=(68)
+calls=27504 0 
+0 137520
+0 14972
+cob=(9)
+cfi=(7)
+cfn=(72)
+calls=14972 0 
+0 44916
+
+fn=(96) tiny_free_list_add_ptr
+0 1442358
+
+fn=(62) szone_malloc
+0 74845
+cfn=(64) szone_malloc_should_clear
+calls=14969 0 
+0 3334021
+
+fn=(64)
+0 374170
+cfn=(66)
+calls=14964 0 
+0 89784
+0 206867
+cfn=(66)
+calls=2467 0 
+0 9868
+0 82398
+cfn=(70) tiny_malloc_from_free_list
+calls=12497 0 
+0 2132603
+0 62485
+cfn=(66)
+calls=12497 0 
+0 49988
+0 25049
+cfn=(66)
+calls=5 0 
+0 30
+0 110
+cfn=(100) small_malloc_from_free_list
+calls=5 0 
+0 803
+0 51
+cfn=(66)
+calls=1 0 
+0 6
+0 110
+cfn=(66)
+calls=1 0 
+0 4
+0 13
+cfn=(66)
+calls=4 0 
+0 16
+0 299390
+cfn=(66)
+calls=1 0 
+0 3
+0 2
+cfn=(66)
+calls=1 0 
+0 4
+0 5
+cfn=(204) allocate_pages_securely
+calls=1 0 
+0 145
+0 3
+cfn=(66)
+calls=1 0 
+0 6
+0 19
+cfn=(66)
+calls=1 0 
+0 6
+0 27
+cfn=(66)
+calls=1 0 
+0 4
+0 42
+cfn=(66)
+calls=1 0 
+0 3
+0 2
+cfn=(66)
+calls=1 0 
+0 4
+0 1
+
+fn=(92)
+0 463716
+cfn=(66)
+calls=4 0 
+0 24
+0 25260
+cfn=(66)
+calls=12528 0 
+0 75168
+0 604652
+cfn=(94)
+calls=10060 0 
+0 231357
+0 351726
+cfn=(98) get_tiny_free_size
+calls=944 0 
+0 21689
+0 23040
+cfn=(184) tiny_free_list_remove_ptr
+calls=916 0 
+0 87825
+0 349561
+cfn=(98)
+calls=1963 0 
+0 44792
+0 21396
+cfn=(184)
+calls=1850 0 
+0 178260
+0 132311
+cfn=(96)
+calls=9947 0 
+0 1052490
+0 256269
+cfn=(258) small_free_list_remove_ptr
+calls=1 0 
+0 96
+0 11017
+cfn=(212) small_free_list_add_ptr
+calls=3 0 
+0 246
+0 125389
+cob=(9)
+cfi=(7)
+cfn=(72)
+calls=12532 0 
+0 37596
+
+fn=(98)
+0 168647
+
+fn=(100)
+0 803
+
+fn=(90)
+0 1225853
+
+fn=(204)
+0 18
+cfn=(206) allocate_pages
+calls=1 0 
+0 116
+0 11
+
+fn=(206)
+0 47
+cfn=(66)
+calls=1 0 
+0 55
+0 14
+
+fn=(58)
+0 179628
+cfn=(60) malloc_zone_malloc
+calls=14969 0 
+0 3827998
+0 119752
+
+fn=(258)
+0 96
+
+fn=(60)
+0 254473
+cfn=(62)
+calls=14969 0 
+0 3408866
+0 164659
+
+fn=(70)
+0 1197833
+cfn=(98)
+calls=574 0 
+0 13202
+0 375256
+cfn=(98)
+calls=3510 0 
+0 80730
+0 716
+cfn=(98)
+calls=358 0 
+0 8234
+0 58902
+cfn=(96)
+calls=3931 0 
+0 389868
+0 7862
+
+fn=(184)
+0 266085
+
+fn=(212)
+0 246
+
+totals: 26143161

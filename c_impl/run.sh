@@ -8,4 +8,8 @@ then
     then
         lldb ./a.out ../scrabble_board.txt ../scrabble_board_config.txt ../scrabble_hand.txt ../dict.txt 
     fi
+    if [ "$1" == "--valgrind" ]
+    then
+        valgrind --tool=callgrind --instr-atstart=no ./a.out ../scrabble_board.txt ../scrabble_board_config.txt ../scrabble_hand.txt ../dict.txt 
+    fi
 fi
