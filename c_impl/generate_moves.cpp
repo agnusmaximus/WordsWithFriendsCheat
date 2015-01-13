@@ -29,6 +29,8 @@ const static int N_LETTERS = 26;
 const static char * DATASTRUCTURE_BINARY_FILE = "datastructures.bin";
 const static int N_MAX_HAND_LETTERS = 7;
 const static int BOARD_SZ = 15;
+const static int BINGO_SCORE = 35;
+const static int N_TOP_WORDS_DISPLAY = 5;
 
 set<char> letterSet = {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'};
 map<string, set<char> > midstringPrefixLetters, startstringSuffixLetters;
@@ -58,6 +60,11 @@ struct letter {
 };
 typedef struct letter letter;
 
+bool wordSort(pair<vector<letter>, int> a, 
+              pair<vector<letter>, int> b) {
+  return a.second > b.second;
+}
+
 /***************************************************
  * DEBUG OPERATIONS                                *
  ***************************************************/
@@ -73,6 +80,13 @@ void printVectLetter(vector<letter> &letters) {
     cout << letters[i].character;
   }
   cout << endl;
+}
+
+void printVectLetterDescriptive(vector<letter> &letters) {
+  for (int i = 0; i < letters.size(); i++) {
+    cout << letters[i].character << " | x : " << letters[i].pos.y+1;
+    cout << " y : " << letters[i].pos.x+1 << endl;
+  }
 }
 
 void printBoard(char board[BOARD_SZ][BOARD_SZ]) {
@@ -259,6 +273,9 @@ void initVerticalCrossSections(char board[BOARD_SZ][BOARD_SZ],
   for (int i = 0; i < BOARD_SZ; i++) {
     for (int j = 0; j < BOARD_SZ; j++) {
       verticalCrossSections[i][j] = letterSet;
+      for (char k = 'a'; k <= 'z'; k++) {
+        verticalCrossSectionScores[i][j][k] = 0;
+      }
     }
   }
   
@@ -290,6 +307,9 @@ void initHorizontalCrossSections(char board[BOARD_SZ][BOARD_SZ],
   for (int i = 0; i < BOARD_SZ; i++) {
     for (int j = 0; j < BOARD_SZ; j++) {
       horizontalCrossSections[i][j] = letterSet;
+      for (char k = 'a'; k <= 'z'; k++) {
+        horizontalCrossSectionScores[i][j][k] = 0;
+      }
     }
   }
   
@@ -302,7 +322,6 @@ void initHorizontalCrossSections(char board[BOARD_SZ][BOARD_SZ],
           string crossSectionWord = getContiguousWord(board, x, y, true, false);
           if (validWords.find(crossSectionWord) == validWords.end()) {
             horizontalCrossSections[x][y].erase(i);
-            horizontalCrossSectionScores[x][y][i-'a'] = 0;
           }
           else {
             horizontalCrossSectionScores[x][y][i-'a'] = scoreWord(board, multipliers, x, y, true, false);
@@ -388,7 +407,7 @@ int getNumNonAnchorPos(int xdir, int ydir, position anchorPos, char board[BOARD_
 void extendForward(vector<letter> &partialSolution, position pos, char board[BOARD_SZ][BOARD_SZ],
                    multiset<char> &hand, int multipliers[BOARD_SZ][BOARD_SZ], int crossScores[BOARD_SZ][BOARD_SZ][N_LETTERS],
                    set<char> cross[BOARD_SZ][BOARD_SZ], bool didPlaceLetter,
-                   int xdir, int ydir, vector<vector<letter> > &sol, 
+                   int xdir, int ydir, vector<pair<vector<letter>, int> > &sol, 
                    int curScore, int curMultiplier, int addedScore) {
   string curString = wordAccumulate(partialSolution);
   
@@ -397,13 +416,9 @@ void extendForward(vector<letter> &partialSolution, position pos, char board[BOA
   }
   if (validWords.find(curString) != validWords.end() && didPlaceLetter) {
     int totalScore = curScore * curMultiplier;
-    if (hand.size() == 0) totalScore += 35;
+    if (hand.size() == 0) totalScore += BINGO_SCORE;
     totalScore += addedScore;
-    sol.push_back(partialSolution);
-    if (curString.size() == 15) {
-      cout << totalScore << endl;
-      cout << curString << endl;
-    }
+    sol.push_back(pair<vector<letter>, int>(partialSolution, totalScore));
   }
   if (pos.y >= BOARD_SZ) {
     return;
@@ -445,7 +460,7 @@ void extendForward(vector<letter> &partialSolution, position pos, char board[BOA
 void extendBackward(vector<letter> &partialSolution, position pos, char board[BOARD_SZ][BOARD_SZ],
                     multiset<char> &hand, int multipliers[BOARD_SZ][BOARD_SZ], int limit, 
                     int crossScores[BOARD_SZ][BOARD_SZ][N_LETTERS], set<char> cross[BOARD_SZ][BOARD_SZ], bool didPlaceLetter, int xdir, int ydir, 
-                    vector<vector<letter> > &sol, int curScore, int curMultiplier) {
+                    vector<pair<vector<letter>, int> > &sol, int curScore, int curMultiplier) {
   string curString = wordAccumulate(partialSolution);
   if (visited(curString, pos, xdir, ydir)) {
     return;
@@ -483,13 +498,13 @@ void extendBackward(vector<letter> &partialSolution, position pos, char board[BO
   }
 }
 
-vector<vector<letter> > generateHorizontalWords(multiset<char> &hand, 
-                                                char board[BOARD_SZ][BOARD_SZ], 
-                                                int multipliers[BOARD_SZ][BOARD_SZ], 
-                                                position anchorPosition, set<char> crossSections[BOARD_SZ][BOARD_SZ],
-                                                int crossSectionScores[BOARD_SZ][BOARD_SZ][N_LETTERS],
-                                                vector<vector<letter> > &sol) {
-  vector<vector<letter> > words;
+vector<pair<vector<letter>, int> > generateHorizontalWords(multiset<char> &hand, 
+                                                           char board[BOARD_SZ][BOARD_SZ], 
+                                                           int multipliers[BOARD_SZ][BOARD_SZ], 
+                                                           position anchorPosition, set<char> crossSections[BOARD_SZ][BOARD_SZ],
+                                                           int crossSectionScores[BOARD_SZ][BOARD_SZ][N_LETTERS],
+                                                           vector<pair<vector<letter>, int> > &sol) {
+  vector<pair<vector<letter>, int> > words;
   vector<letter> partials;
 
   int limitLeft = getNumNonAnchorPos(-1, 0, anchorPosition, board);
@@ -507,13 +522,13 @@ vector<vector<letter> > generateHorizontalWords(multiset<char> &hand,
   return words;
 }
 
-vector<vector<letter> > generateVerticalWords(multiset<char> &hand,
-                                              char board[BOARD_SZ][BOARD_SZ], 
-                                              int multipliers[BOARD_SZ][BOARD_SZ],
-                                              position anchorPosition, set<char> crossSections[BOARD_SZ][BOARD_SZ],
-                                              int crossSectionScores[BOARD_SZ][BOARD_SZ][N_LETTERS],
-                                              vector<vector<letter> > &sol) {
-  vector<vector<letter> > words;
+vector<pair<vector<letter>, int> > generateVerticalWords(multiset<char> &hand,
+                                                         char board[BOARD_SZ][BOARD_SZ], 
+                                                         int multipliers[BOARD_SZ][BOARD_SZ],
+                                                         position anchorPosition, set<char> crossSections[BOARD_SZ][BOARD_SZ],
+                                                         int crossSectionScores[BOARD_SZ][BOARD_SZ][N_LETTERS],
+                                                         vector<pair<vector<letter>, int> > &sol) {
+  vector<pair<vector<letter>, int> > words;
   vector<letter> partials;
   
   int limitUp = getNumNonAnchorPos(0, -1, anchorPosition, board);
@@ -530,7 +545,7 @@ vector<vector<letter> > generateVerticalWords(multiset<char> &hand,
   return words;
 }
  
-vector<vector<letter> > generateValidWords(multiset<char> &hand, 
+vector<pair<vector<letter>, int> > generateValidWords(multiset<char> &hand, 
                                            char board[BOARD_SZ][BOARD_SZ],  
                                            int multipliers[BOARD_SZ][BOARD_SZ],
                                            set<char>  verticalCrossSections[BOARD_SZ][BOARD_SZ], 
@@ -538,7 +553,7 @@ vector<vector<letter> > generateValidWords(multiset<char> &hand,
                                            int verticalCrossSectionScores[BOARD_SZ][BOARD_SZ][N_LETTERS],
                                            int horizontalCrossSectionScores[BOARD_SZ][BOARD_SZ][N_LETTERS]) {
   unordered_set<position, positionHash, positionCompare> anchorPositions = generateAnchorPositions(board);
-  vector<vector<letter> > validWords;
+  vector<pair<vector<letter>, int> > validWords;
   
   for (const position & anchorPosition : anchorPositions) {
     generateHorizontalWords(hand, board, multipliers, anchorPosition, 
@@ -587,13 +602,18 @@ int main(int argc, char *argv[]) {
 
   DEBUG_PRINT("Generating Words...");
   CALLGRIND_START_INSTRUMENTATION;
-  vector<vector<letter> > validWords = generateValidWords(hand, board, scoreMultipliers, 
+  vector<pair<vector<letter>, int> > validWords = generateValidWords(hand, board, scoreMultipliers, 
                                                           verticalCrossSections,
                                                           horizontalCrossSections,
                                                           verticalCrossSectionScores,
                                                           horizontalCrossSectionScores);
   CALLGRIND_STOP_INSTRUMENTATION;
   CALLGRIND_DUMP_STATS;
-  cout << validWords.size() << endl;
+  DEBUG_PRINT("Sorting Words...");
+  sort(validWords.begin(), validWords.end(), wordSort);
+  for (int i = 0; i < N_TOP_WORDS_DISPLAY; i++) {
+    cout << "Score: " << validWords[i].second << endl;
+    printVectLetterDescriptive(validWords[i].first);
+  }
   DEBUG_PRINT("Done.");
 }
