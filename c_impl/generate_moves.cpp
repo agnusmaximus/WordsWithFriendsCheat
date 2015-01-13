@@ -416,8 +416,7 @@ void extendForward(vector<letter> &partialSolution, position pos, char board[BOA
   }
   if (((pos.x >= BOARD_SZ || pos.y >= BOARD_SZ) ||
        board[pos.x][pos.y] == '0') &&
-      validWords.find(curString) != validWords.end() && 
-      didPlaceLetter) {
+      validWords.find(curString) != validWords.end() && didPlaceLetter) {
     int totalScore = curScore * curMultiplier;
     if (hand.size() == 0) totalScore += BINGO_SCORE;
     totalScore += addedScore;
@@ -464,7 +463,7 @@ void extendBackward(vector<letter> &partialSolution, position pos, char board[BO
                     multiset<char> &hand, int multipliers[BOARD_SZ][BOARD_SZ], int limit, 
                     int crossScores[BOARD_SZ][BOARD_SZ][N_LETTERS], set<char> cross[BOARD_SZ][BOARD_SZ], 
                     bool didPlaceLetter, int xdir, int ydir, vector<pair<vector<letter>, int> > &sol, 
-                    int curScore, int curMultiplier) {
+                    int curScore, int curMultiplier, int addedScore) {
   string curString = wordAccumulate(partialSolution);
 
   if (visited(curString, pos, xdir, ydir)) {
@@ -482,7 +481,7 @@ void extendBackward(vector<letter> &partialSolution, position pos, char board[BO
     
     extendForward(partialSolution, {nextx, nexty}, board, hand, 
                   multipliers, crossScores, cross, didPlaceLetter,
-                  xdir * -1, ydir * -1, sol, curScore, curMultiplier, 0);
+                  xdir * -1, ydir * -1, sol, curScore, curMultiplier, addedScore);
   }
   if (limit > 0) {
     for (char l : hand) {
@@ -496,7 +495,8 @@ void extendBackward(vector<letter> &partialSolution, position pos, char board[BO
         extendBackward(partialSolution, {pos.x+xdir, pos.y+ydir}, board, 
                        newHand, multipliers, limit-1, crossScores, cross, true, xdir, ydir, sol,
                        curScore + letterValue(l) * letterMultiplier(multipliers, pos.x, pos.y), 
-                       curMultiplier * wordMultiplier(multipliers, pos.x, pos.y));
+                       curMultiplier * wordMultiplier(multipliers, pos.x, pos.y),
+                       addedScore + crossScores[pos.x][pos.y][l-'a']);
         partialSolution.erase(partialSolution.begin());
         board[pos.x][pos.y] = '0';
       }
@@ -522,7 +522,8 @@ vector<pair<vector<letter>, int> > generateHorizontalWords(multiset<char> &hand,
   }
   else {
     extendBackward(partials, (position){anchorPosition.x, anchorPosition.y}, 
-                   board, hand, multipliers, limitLeft, crossSectionScores, crossSections, false, -1, 0, sol, 0, 1);
+                   board, hand, multipliers, limitLeft, crossSectionScores, 
+                   crossSections, false, -1, 0, sol, 0, 1, 0);
   }
   return words;
 }
@@ -546,7 +547,8 @@ vector<pair<vector<letter>, int> > generateVerticalWords(multiset<char> &hand,
   }
   else {
     extendBackward(partials, (position){anchorPosition.x, anchorPosition.y}, 
-                   board, hand, multipliers, limitUp, crossSectionScores, crossSections, false, 0, -1, sol, 0, 1);
+                   board, hand, multipliers, limitUp, crossSectionScores, 
+                   crossSections, false, 0, -1, sol, 0, 1, 0);
   }
   return words;
 }
