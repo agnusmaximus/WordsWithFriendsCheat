@@ -55,8 +55,8 @@ struct positionHash {
 };
 
 struct letter {
-  char character;
   position pos;
+  char character;
 };
 typedef struct letter letter;
 
@@ -346,24 +346,6 @@ string wordAccumulate(vector<letter> &seq) {
 /***************************************************
  * SEARCH                                          *
  ***************************************************/
-bool visited(string &curString, position pos, int xdir, int ydir) {
-  static map<string, map<int, bool> > mem;
-  xdir += 1;
-  ydir += 1;
-  int positionHash = pos.x * 100 + pos.y;
-  int dirHash = xdir * 10 + ydir;
-  int hash = positionHash * 100 + dirHash;
-  bool res = false;
-  if (mem.find(curString) != mem.end() &&
-      mem[curString].find(hash) != mem[curString].end()) {
-    res = mem[curString][hash];
-  }
-  else {
-    mem[curString][hash] = true;
-  }
-  return res;
-}
-
 unordered_set<position, positionHash, positionCompare> generateAnchorPositions(char board[BOARD_SZ][BOARD_SZ]) {
   unordered_set<position, positionHash, positionCompare> anchorPositions;
   for (int i = 0; i < BOARD_SZ; i++) {
@@ -411,9 +393,6 @@ void extendForward(vector<letter> &partialSolution, position pos, char board[BOA
                    int xdir, int ydir, vector<pair<vector<letter>, int> > &sol, 
                    int curScore, int curMultiplier, int addedScore) {
   string curString = wordAccumulate(partialSolution);
-  if (visited(curString, pos, xdir, ydir)) {
-    return;
-  }
   if (((pos.x >= BOARD_SZ || pos.y >= BOARD_SZ) ||
        board[pos.x][pos.y] == '0') &&
       validWords.find(curString) != validWords.end() && didPlaceLetter) {
@@ -430,12 +409,13 @@ void extendForward(vector<letter> &partialSolution, position pos, char board[BOA
   }
   
   if (board[pos.x][pos.y] == '0') {
-    for (char l : hand) {
+    for (auto each = hand.begin(); each != hand.end(); each = hand.upper_bound(*each)) {
+      char l = *each;
       if (startstringSuffixLetters[curString].find(l) != startstringSuffixLetters[curString].end() &&
           cross[pos.x][pos.y].find(l) != cross[pos.x][pos.y].end()) {
         multiset<char> newHand = hand;
         newHand.erase(newHand.find(l));
-        partialSolution.push_back({l, {pos.x, pos.y}});
+        partialSolution.push_back({{pos.x, pos.y}, l});
         extendForward(partialSolution, {pos.x+xdir, pos.y+ydir}, board, newHand, 
                       multipliers, crossScores, cross, true, xdir, ydir, sol, 
                       curScore + letterValue(l) * letterMultiplier(multipliers, pos.x, pos.y),
@@ -448,7 +428,7 @@ void extendForward(vector<letter> &partialSolution, position pos, char board[BOA
   else {
     if (startstringSuffixLetters[curString].find(board[pos.x][pos.y]) != 
         startstringSuffixLetters[curString].end()) {
-      partialSolution.push_back({board[pos.x][pos.y], {pos.x, pos.y}});
+      partialSolution.push_back({{pos.x, pos.y}, board[pos.x][pos.y]});
       extendForward(partialSolution, {pos.x+xdir, pos.y+ydir}, board, hand, 
                     multipliers, crossScores, cross, didPlaceLetter, xdir, ydir, sol, 
                     curScore + letterValue(board[pos.x][pos.y]),
@@ -466,9 +446,6 @@ void extendBackward(vector<letter> &partialSolution, position pos, char board[BO
                     int curScore, int curMultiplier, int addedScore) {
   string curString = wordAccumulate(partialSolution);
 
-  if (visited(curString, pos, xdir, ydir)) {
-    return;
-  }
   if (startstringSuffixLetters.find(curString) != startstringSuffixLetters.end() &&
       startstringSuffixLetters[curString].size() != 0) {
     int nextx = pos.x, nexty = pos.y;
@@ -484,14 +461,15 @@ void extendBackward(vector<letter> &partialSolution, position pos, char board[BO
                   xdir * -1, ydir * -1, sol, curScore, curMultiplier, addedScore);
   }
   if (limit > 0) {
-    for (char l : hand) {
+    for (auto each = hand.begin(); each != hand.end(); each = hand.upper_bound(*each)) {
+      char l = *each;
       if (midstringPrefixLetters.find(curString) != midstringPrefixLetters.end() &&
           midstringPrefixLetters[curString].find(l) != midstringPrefixLetters[curString].end() &&
           cross[pos.x][pos.y].find(l) != cross[pos.x][pos.y].end()) {
         multiset<char> newHand = hand;
         newHand.erase(newHand.find(l));
         board[pos.x][pos.y] = l;
-        partialSolution.insert(partialSolution.begin(), {l, {pos.x, pos.y}});
+        partialSolution.insert(partialSolution.begin(), {{pos.x, pos.y}, l});
         extendBackward(partialSolution, {pos.x+xdir, pos.y+ydir}, board, 
                        newHand, multipliers, limit-1, crossScores, cross, true, xdir, ydir, sol,
                        curScore + letterValue(l) * letterMultiplier(multipliers, pos.x, pos.y), 
