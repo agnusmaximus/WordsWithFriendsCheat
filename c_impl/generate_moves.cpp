@@ -388,10 +388,11 @@ unordered_set<position, positionHash, positionCompare> generateAnchorPositions(c
 int getNumNonAnchorPos(int xdir, int ydir, position anchorPos, char board[BOARD_SZ][BOARD_SZ]) {
   int x = anchorPos.x+xdir, y = anchorPos.y+ydir, k = 0;
   while (x >= 0 && y >= 0) {
-    for (int i = x-1; i <= x+1; i++) {
-      for (int j = y-1; j <= y+1; j++) {
-        if (i >= 0 && j >= 0 && i < BOARD_SZ && j < BOARD_SZ) {
-          if (board[i][j] != '0') {
+    for (int i = -1; i <= 1; i++) {
+      for (int j = -1; j <= 1; j++) {
+        if ((abs(i) + abs(j) == 1) &&
+            (i+x >= 0 && j+y >= 0 && i+x < BOARD_SZ && j+y < BOARD_SZ)) {
+          if (board[i+x][j+y] != '0') {
             return k;
           }
         }
@@ -491,12 +492,12 @@ void extendBackward(vector<letter> &partialSolution, position pos, char board[BO
         multiset<char> newHand = hand;
         newHand.erase(newHand.find(l));
         board[pos.x][pos.y] = l;
-        partialSolution.push_back({l, {pos.x, pos.y}});
+        partialSolution.insert(partialSolution.begin(), {l, {pos.x, pos.y}});
         extendBackward(partialSolution, {pos.x+xdir, pos.y+ydir}, board, 
                        newHand, multipliers, limit-1, crossScores, cross, true, xdir, ydir, sol,
                        curScore + letterValue(l) * letterMultiplier(multipliers, pos.x, pos.y), 
                        curMultiplier * wordMultiplier(multipliers, pos.x, pos.y));
-        partialSolution.pop_back();
+        partialSolution.erase(partialSolution.begin());
         board[pos.x][pos.y] = '0';
       }
     }
@@ -513,7 +514,6 @@ vector<pair<vector<letter>, int> > generateHorizontalWords(multiset<char> &hand,
   vector<pair<vector<letter>, int> > words;
   vector<letter> partials;
   int limitLeft = getNumNonAnchorPos(-1, 0, anchorPosition, board);
-
   if (limitLeft == 0 && anchorPosition.x-1 >= 0) {
     int i;
     for (i = anchorPosition.x; i > 0 && board[i-1][anchorPosition.y] != '0'; i--);
