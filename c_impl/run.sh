@@ -8,8 +8,12 @@ then
     then
         lldb ./a.out ../scrabble_board.txt ../scrabble_board_config.txt ../scrabble_hand.txt ../dict.txt 
     fi
-    if [ "$1" == "--valgrind" ]
+    if [ "$1" == "--callgrind" ]
     then
         valgrind --tool=callgrind --instr-atstart=no ./a.out ../scrabble_board.txt ../scrabble_board_config.txt ../scrabble_hand.txt ../dict.txt 
+    fi
+    if [ "$1" == "--valgrind" ]
+    then
+        valgrind --show-leak-kinds=all --leak-check=full ./a.out ../scrabble_board.txt ../scrabble_board_config.txt ../scrabble_hand.txt ../dict.txt 
     fi
 fi
